@@ -1,0 +1,17 @@
+node_modules/
+.expo/
+dist/
+npm-debug.log
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+.env
+.env.local
+.env.*.local
+yarn.lock
+package-lock.json
+.DS_Store

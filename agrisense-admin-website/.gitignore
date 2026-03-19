@@ -1,0 +1,12 @@
+node_modules/
+.next/
+dist/
+build/
+npm-debug.log
+.env
+.env.local
+.env.*.local
+yarn.lock
+package-lock.json
+.DS_Store
+*.pem
