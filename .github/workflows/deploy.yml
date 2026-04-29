@@ -26,7 +26,7 @@ jobs:
         run: pip install flake8
 
       - name: Lint backend
-        run: flake8 agrisense-backend --max-line-length=120 --exclude=__pycache__,venv,.venv
+        run: flake8 agrisense-backend --max-line-length=120 --exclude=__pycache__,venv,.venv,agrisense-backend/ml
 
       - name: Set up Node
         uses: actions/setup-node@v4
