@@ -5,8 +5,8 @@ on:
     branches: [main]
 
 env:
-  AWS_REGION: eu-west-1
-  ECR_REGISTRY: 561818313889.dkr.ecr.eu-west-1.amazonaws.com
+  AWS_REGION: eu-north-1
+  ECR_REGISTRY: 561818313889.dkr.ecr.eu-north-1.amazonaws.com
 
 jobs:
   deploy:
@@ -45,7 +45,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            aws ecr get-login-password --region eu-west-1 | \
+            aws ecr get-login-password --region eu-north-1 | \
             docker login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
             docker pull ${{ env.ECR_REGISTRY }}/agrisense-backend:latest
             docker pull ${{ env.ECR_REGISTRY }}/agrisense-admin:latest
