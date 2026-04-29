@@ -22,3 +22,16 @@ models/
 
 # Logs
 *.log
+node_modules
+
+# Word documents and temporary Office files
+*.docx
+*.doc
+*.xlsx
+*.xls
+*.pptx
+*.ppt
+~$*
+
+# Windows metadata files
+*:Zone.Identifier

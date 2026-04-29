@@ -1,0 +1,12 @@
+services:
+  backend:
+    build: ./agrisense-backend
+    ports:
+      - "8000:8000"
+    env_file: ./agrisense-backend/.env
+
+  admin:
+    build: ./agrisense-admin-website
+    ports:
+      - "3000:3000"
+    env_file: ./agrisense-admin-website/.env

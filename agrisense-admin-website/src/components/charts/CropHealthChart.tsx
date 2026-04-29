@@ -1,6 +1,6 @@
 'use client'
 
-import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts'
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts'
 
 const data = [
   { name: 'Healthy', value: 65, fill: '#10B981' },
