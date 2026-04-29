@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
 
 app = FastAPI(
@@ -11,7 +10,6 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Configure CORS
 origins = [
     "http://localhost:3000",
     "http://localhost:8000",
@@ -27,7 +25,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Health check endpoint
+
 @app.get("/")
 async def root():
     return {
@@ -36,6 +34,7 @@ async def root():
         "version": "1.0.0"
     }
 
+
 @app.get("/health")
 async def health_check():
     return {
@@ -43,7 +42,7 @@ async def health_check():
         "service": "agrisense-backend"
     }
 
-# Pest detection endpoint
+
 @app.get("/api/pest-detection/{crop}")
 async def get_pest_detection(crop: str):
     return {
@@ -53,7 +52,7 @@ async def get_pest_detection(crop: str):
         "recommendation": "Monitor crop regularly"
     }
 
-# Crop health endpoint
+
 @app.get("/api/crop-health")
 async def get_crop_health():
     return {
@@ -64,6 +63,7 @@ async def get_crop_health():
             {"name": "tomato", "health": 90, "status": "excellent"}
         ]
     }
+
 
 if __name__ == "__main__":
     import uvicorn
