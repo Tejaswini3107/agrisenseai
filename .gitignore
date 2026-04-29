@@ -1,3 +1,27 @@
+# Virtual environment
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment variables (IMPORTANT - contains API keys)
+.env
+
+# Data files (generated datasets)
+data/
+
+# Trained models (large + generated)
+models/
+
+# OS files
+.DS_Store
+
+# VS Code settings (optional)
+.vscode/
+
+# Logs
+*.log
 node_modules
 
 # Word documents and temporary Office files
