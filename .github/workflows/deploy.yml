@@ -1,0 +1,54 @@
+name: Deploy AgriSense AI
+
+on:
+  push:
+    branches: [main]
+
+env:
+  AWS_REGION: eu-west-1
+  ECR_REGISTRY: 561818313889.dkr.ecr.eu-west-1.amazonaws.com
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to ECR
+        run: |
+          aws ecr get-login-password --region ${{ env.AWS_REGION }} | \
+          docker login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
+
+      - name: Build and push backend
+        run: |
+          docker build -t agrisense-backend ./agrisense-backend
+          docker tag agrisense-backend ${{ env.ECR_REGISTRY }}/agrisense-backend:latest
+          docker push ${{ env.ECR_REGISTRY }}/agrisense-backend:latest
+
+      - name: Build and push admin
+        run: |
+          docker build -t agrisense-admin ./agrisense-admin-website
+          docker tag agrisense-admin ${{ env.ECR_REGISTRY }}/agrisense-admin:latest
+          docker push ${{ env.ECR_REGISTRY }}/agrisense-admin:latest
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            aws ecr get-login-password --region eu-west-1 | \
+            docker login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
+            docker pull ${{ env.ECR_REGISTRY }}/agrisense-backend:latest
+            docker pull ${{ env.ECR_REGISTRY }}/agrisense-admin:latest
+            cd ~/agrisense
+            docker compose down
+            docker compose up -d
