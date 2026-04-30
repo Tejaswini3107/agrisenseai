@@ -24,6 +24,14 @@ models/
 *.log
 node_modules
 
+# iOS CocoaPods vendored files for mobile workspace
+agrisense-mobile/ios/Pods/
+agrisense-mobile/ios/Pods/**
+
+# Xcode build artifacts
+agrisense-mobile/ios/Build/
+agrisense-mobile/ios/DerivedData/
+
 # Word documents and temporary Office files
 *.docx
 *.doc
@@ -35,3 +43,4 @@ node_modules
 
 # Windows metadata files
 *:Zone.Identifier
+*.pem
