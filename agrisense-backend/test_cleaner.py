@@ -11,10 +11,10 @@ print("\n1. Creating test DataFrame with various data issues")
 print("-" * 60)
 
 test_data = {
-    'temperature': [25.5, np.nan, 32.0, -10, 60.0, 20.0, np.nan, 28.5],
-    'humidity': [65.0, 75.0, np.nan, 120.0, -5.0, 80.0, 90.0, np.nan],
-    'rainfall_mm': [5.0, np.nan, 0.0, 15.0, 600.0, np.nan, 25.0, 10.0],
-    'wind_speed': [10.5, 15.0, np.nan, 200.0, 5.0, np.nan, 30.0, 25.5]
+    "temperature": [25.5, np.nan, 32.0, -10, 60.0, 20.0, np.nan, 28.5],
+    "humidity": [65.0, 75.0, np.nan, 120.0, -5.0, 80.0, 90.0, np.nan],
+    "rainfall_mm": [5.0, np.nan, 0.0, 15.0, 600.0, np.nan, 25.0, 10.0],
+    "wind_speed": [10.5, 15.0, np.nan, 200.0, 5.0, np.nan, 30.0, 25.5],
 }
 
 df_original = pd.DataFrame(test_data)
@@ -42,7 +42,9 @@ print("-" * 60)
 
 print("\nTemperature column:")
 print(f"  Range: {df_cleaned['temperature'].min():.2f} to {df_cleaned['temperature'].max():.2f}°C")
-print(f"  All values in [-5, 55]? {(df_cleaned['temperature'] >= -5).all() and (df_cleaned['temperature'] <= 55).all()}")
+print(
+    f"  All values in [-5, 55]? {(df_cleaned['temperature'] >= -5).all() and (df_cleaned['temperature'] <= 55).all()}"
+)
 print(f"  No NaN values? {not df_cleaned['temperature'].isnull().any()}")
 
 print("\nHumidity column:")
@@ -52,7 +54,9 @@ print(f"  No NaN values? {not df_cleaned['humidity'].isnull().any()}")
 
 print("\nRainfall column:")
 print(f"  Range: {df_cleaned['rainfall_mm'].min():.2f} to {df_cleaned['rainfall_mm'].max():.2f}mm")
-print(f"  All values in [0, 500]? {(df_cleaned['rainfall_mm'] >= 0).all() and (df_cleaned['rainfall_mm'] <= 500).all()}")
+print(
+    f"  All values in [0, 500]? {(df_cleaned['rainfall_mm'] >= 0).all() and (df_cleaned['rainfall_mm'] <= 500).all()}"
+)
 print(f"  No NaN values? {not df_cleaned['rainfall_mm'].isnull().any()}")
 
 print("\nWind Speed column:")
@@ -68,7 +72,9 @@ print("-" * 60)
 print(f"✓ Original rows: {len(df_original)}")
 print(f"✓ Cleaned rows: {len(df_cleaned)}")
 print(f"✓ Rows removed: {len(df_original) - len(df_cleaned)}")
-print(f"✓ All required columns present? {all(col in df_cleaned.columns for col in ['temperature', 'humidity', 'rainfall_mm', 'wind_speed'])}")
+print(
+    f"✓ All required columns present? {all(col in df_cleaned.columns for col in ['temperature', 'humidity', 'rainfall_mm', 'wind_speed'])}"
+)
 print(f"✓ No NaN values in critical columns? {not df_cleaned[['temperature', 'humidity']].isnull().any().any()}")
 print(f"✓ Index properly reset? {list(df_cleaned.index) == list(range(len(df_cleaned)))}")
 
