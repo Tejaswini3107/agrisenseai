@@ -135,6 +135,7 @@
 				Base,
 			);
 			mainGroup = 1A1A1A1A1A1A1A1A1A1A1A20;
+			productRefGroup = 1A1A1A1A1A1A1A1A1A1A1A16 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
