@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from data_pipeline.collectors.openweather import get_current_weather, get_forecast
 from data_pipeline.collectors.nasa_power import get_soil_moisture
-from data_pipeline.climate_model.predict import predict_all, forecast_weather
+# from data_pipeline.climate_model.predict import predict_all, forecast_weather
 
 # Create router with prefix and tags
 router = APIRouter(prefix="/api/weather", tags=["Weather"])

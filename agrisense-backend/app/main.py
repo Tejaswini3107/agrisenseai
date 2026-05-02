@@ -6,7 +6,7 @@ import os
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + "/../")
 
-from app.routers import weather
+from app.routers import weather  # noqa: E402
 
 # Initialize FastAPI application
 app = FastAPI(
