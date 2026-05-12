@@ -29,6 +29,7 @@ app.add_middleware(
 app.include_router(weather.router)
 app.include_router(chatbot.router)
 
+
 @app.get("/")
 async def root():
     """
