@@ -7,33 +7,32 @@ import pandas as pd
 np.random.seed(42)
 
 LOCATIONS = [
-    {"name": "Punjab","lat": 30.9, "lon": 75.8},
-    {"name": "Maharashtra","lat": 19.0, "lon": 76.1},
-    {"name": "Andhra Pradesh","lat": 15.9, "lon": 79.7},
-    {"name": "Tamil Nadu","lat": 11.1, "lon": 77.3},
-    {"name": "Uttar Pradesh","lat": 27.0, "lon": 80.9},
-    {"name": "Faisalabad","lat": 31.4, "lon": 73.1},
-    {"name": "Rahim Yar Khan","lat": 28.4, "lon": 70.3},
-    {"name": "Nizamabad","lat": 18.6, "lon": 78.1},
-    {"name": "karnataka","lat": 15.3, "lon": 75.1},
-
+    {"name": "Punjab", "lat": 30.9, "lon": 75.8},
+    {"name": "Maharashtra", "lat": 19.0, "lon": 76.1},
+    {"name": "Andhra Pradesh", "lat": 15.9, "lon": 79.7},
+    {"name": "Tamil Nadu", "lat": 11.1, "lon": 77.3},
+    {"name": "Uttar Pradesh", "lat": 27.0, "lon": 80.9},
+    {"name": "Faisalabad", "lat": 31.4, "lon": 73.1},
+    {"name": "Rahim Yar Khan", "lat": 28.4, "lon": 70.3},
+    {"name": "Nizamabad", "lat": 18.6, "lon": 78.1},
+    {"name": "karnataka", "lat": 15.3, "lon": 75.1},
 ]
 
 CROPS = ["rice", "wheat", "cotton", "tomato"]
 STAGES = ["seedling", "vegetative", "flowering", "maturity"]
 
 PEST_BY_CROP = {
-    "rice":   ["stem_borer","leaf_miner","aphids"],
-    "wheat":  ["aphids","stem_borer", "leaf_miner"],
-    "cotton": ["bollworm","whitefly","aphids"],
-    "tomato": ["whitefly","aphids","bollworm"],
+    "rice": ["stem_borer", "leaf_miner", "aphids"],
+    "wheat": ["aphids", "stem_borer", "leaf_miner"],
+    "cotton": ["bollworm", "whitefly", "aphids"],
+    "tomato": ["whitefly", "aphids", "bollworm"],
 }
 
 STAGE_RISK_WEIGHT = {
-    "seedling":   0.05,
+    "seedling": 0.05,
     "vegetative": 0.15,
-    "flowering":  0.25,
-    "maturity":   0.10,
+    "flowering": 0.25,
+    "maturity": 0.10,
 }
 
 
@@ -41,31 +40,33 @@ def fetch_nasa_weather(lat, lon, start, end):
     url = "https://power.larc.nasa.gov/api/temporal/daily/point"
     params = {
         "parameters": "T2M,RH2M,PRECTOTCORR,WS2M",
-        "community":  "AG",
-        "longitude":  lon,
-        "latitude":   lat,
-        "start":      start,
-        "end":        end,
-        "format":     "JSON",
+        "community": "AG",
+        "longitude": lon,
+        "latitude": lat,
+        "start": start,
+        "end": end,
+        "format": "JSON",
     }
     response = requests.get(url, params=params, timeout=60)
     response.raise_for_status()
     data = response.json()["properties"]["parameter"]
 
-    dates        = list(data["T2M"].keys())
+    dates = list(data["T2M"].keys())
     temperatures = list(data["T2M"].values())
-    humidities   = list(data["RH2M"].values())
-    rainfalls    = list(data["PRECTOTCORR"].values())
+    humidities = list(data["RH2M"].values())
+    rainfalls = list(data["PRECTOTCORR"].values())
     # NASA gives wind in metres per second. Multiply by 3.6 to get km/h.
-    wind_speeds  = [v * 3.6 for v in data["WS2M"].values()]
+    wind_speeds = [v * 3.6 for v in data["WS2M"].values()]
 
-    df = pd.DataFrame({
-        "date":        dates,
-        "temperature": temperatures,
-        "humidity":    humidities,
-        "rainfall_mm": rainfalls,
-        "wind_speed":  wind_speeds,
-    })
+    df = pd.DataFrame(
+        {
+            "date": dates,
+            "temperature": temperatures,
+            "humidity": humidities,
+            "rainfall_mm": rainfalls,
+            "wind_speed": wind_speeds,
+        }
+    )
 
     df.replace(-999.0, np.nan, inplace=True)
     df.dropna(inplace=True)
@@ -133,13 +134,13 @@ for loc in LOCATIONS:
         continue
 
     n = len(df)
-    df["crop_type"] = np.random.choice(CROPS,   size=n)
-    df["growth_stage"] = np.random.choice(STAGES,  size=n)
+    df["crop_type"] = np.random.choice(CROPS, size=n)
+    df["growth_stage"] = np.random.choice(STAGES, size=n)
     df["previous_pest_occurrence"] = np.random.choice([0, 1], size=n, p=[0.65, 0.35])
-    df["location"]  = loc["name"]
+    df["location"] = loc["name"]
 
-    pest_risks  = []
-    pest_types  = []
+    pest_risks = []
+    pest_types = []
 
     for _, row in df.iterrows():
         score = compute_pest_risk(

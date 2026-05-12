@@ -25,14 +25,14 @@ print("\n2. Testing get_historical_weather(lat, lon, start_date, end_date)")
 print("-" * 60)
 try:
     # Get data for last 7 days
-    end_date = datetime.utcnow().strftime('%Y%m%d')
-    start_date = (datetime.utcnow() - timedelta(days=7)).strftime('%Y%m%d')
-    
+    end_date = datetime.utcnow().strftime("%Y%m%d")
+    start_date = (datetime.utcnow() - timedelta(days=7)).strftime("%Y%m%d")
+
     print(f"Fetching weather data from {start_date} to {end_date}")
     print(f"Location: ({latitude}, {longitude})")
-    
+
     df = get_historical_weather(latitude, longitude, start_date, end_date)
-    
+
     if df is not None and len(df) > 0:
         print(f"✓ Retrieved {len(df)} days of historical weather data")
         print("\nDataFrame head:")
@@ -49,3 +49,4 @@ except Exception as e:
 print("\n" + "=" * 60)
 print("Tests completed!")
 print("=" * 60)
+

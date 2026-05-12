@@ -4,11 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-app = FastAPI(
-    title="AgriSenseAI API",
-    description="Agricultural Intelligence Platform API",
-    version="1.0.0"
-)
+app = FastAPI(title="AgriSenseAI API", description="Agricultural Intelligence Platform API", version="1.0.0")
 
 origins = [
     "http://localhost:3000",
@@ -28,29 +24,17 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    return {
-        "message": "AgriSenseAI API is running",
-        "status": "healthy",
-        "version": "1.0.0"
-    }
+    return {"message": "AgriSenseAI API is running", "status": "healthy", "version": "1.0.0"}
 
 
 @app.get("/health")
 async def health_check():
-    return {
-        "status": "healthy",
-        "service": "agrisense-backend"
-    }
+    return {"status": "healthy", "service": "agrisense-backend"}
 
 
 @app.get("/api/pest-detection/{crop}")
 async def get_pest_detection(crop: str):
-    return {
-        "crop": crop,
-        "pests": [],
-        "risk_level": "low",
-        "recommendation": "Monitor crop regularly"
-    }
+    return {"crop": crop, "pests": [], "risk_level": "low", "recommendation": "Monitor crop regularly"}
 
 
 @app.get("/api/crop-health")
@@ -60,11 +44,12 @@ async def get_crop_health():
             {"name": "rice", "health": 85, "status": "healthy"},
             {"name": "wheat", "health": 78, "status": "good"},
             {"name": "cotton", "health": 72, "status": "fair"},
-            {"name": "tomato", "health": 90, "status": "excellent"}
+            {"name": "tomato", "health": 90, "status": "excellent"},
         ]
     }
 
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000)
