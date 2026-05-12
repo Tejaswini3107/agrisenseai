@@ -23,3 +23,4 @@ def ask_agriparam(question: str, context: str = None) -> str:
         return response.strip()
     except Exception as e:
         return f"AgriParam service unavailable: {str(e)}"
+    
