@@ -7,6 +7,7 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + "/../")
 
 from app.routers import weather  # noqa: E402
+from app.routers import chatbot  # noqa: E402
 
 # Initialize FastAPI application
 app = FastAPI(
@@ -26,6 +27,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(weather.router)
+app.include_router(chatbot.router)
 
 
 @app.get("/")
