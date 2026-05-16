@@ -11,7 +11,6 @@ env:
   ECR_REGISTRY: 561818313889.dkr.ecr.eu-north-1.amazonaws.com
 
 jobs:
-
   # ─── Stage 1: Lint ───────────────────────────────────────
   lint:
     name: "Stage 1 — Lint & Code Quality"
@@ -34,7 +33,7 @@ jobs:
             agrisense-backend/tests \
             --max-line-length=120 \
             --exclude=__pycache__,venv,.venv
-            
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
@@ -87,12 +86,12 @@ jobs:
             --ignore-vuln CVE-2025-43859 \
             --ignore-vuln CVE-2024-47874 \
             --ignore-vuln CVE-2025-54121
+
       - name: Scan for hardcoded secrets
         uses: trufflesecurity/trufflehog@main
         with:
           path: ./
           extra_args: --only-verified
-          
 
   # ─── Stage 4: Build ──────────────────────────────────────
   build:
@@ -154,12 +153,29 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
+          envs: HF_TOKEN,DB_HOST,DB_USER,DB_PASSWORD
           script: |
             aws ecr get-login-password --region eu-north-1 | \
             docker login --username AWS --password-stdin 561818313889.dkr.ecr.eu-north-1.amazonaws.com
             docker pull 561818313889.dkr.ecr.eu-north-1.amazonaws.com/agrisense-backend:latest
             docker pull 561818313889.dkr.ecr.eu-north-1.amazonaws.com/agrisense-admin:latest
             cd ~/agrisense
+            cat > docker-compose.yml << EOF
+            services:
+             backend:
+              image: 561818313889.dkr.ecr.eu-north-1.amazonaws.com/agrisense-backend:latest
+                ports:
+                 - "8000:8000"
+               environment:
+                - DB_HOST=agrisense-db.cfoqq0o00rh0.eu-north-1.rds.amazonaws.com
+                - DB_USER=agrisense_admin
+                - DB_PASSWORD=sEBtT6U9fswuCeG
+                - HF_TOKEN=${{ secrets.HF_TOKEN }}
+              admin:
+                image: 561818313889.dkr.ecr.eu-north-1.amazonaws.com/agrisense-admin:latest
+                ports:
+                 - "3000:3000"
+            EOF
             docker compose down
             docker compose up -d
 
