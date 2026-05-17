@@ -3,38 +3,36 @@ from fastapi.middleware.cors import CORSMiddleware
 import sys
 import os
 
-# Add parent directory to path for imports
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + "/../")
 
 from app.routers import weather  # noqa: E402
 from app.routers import chatbot  # noqa: E402
+from app.routers import farmers  # noqa: E402
+from app.database import init_db  # noqa: E402
 
-# Initialize FastAPI application
 app = FastAPI(
     title="AgriSense AI Backend",
     description="Climate and agricultural prediction API for crop recommendations, disease risk, and yield forecasting",
     version="1.0.0",
 )
 
-# Configure CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, restrict to specific domains
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Include routers
+init_db()
+
 app.include_router(weather.router)
 app.include_router(chatbot.router)
+app.include_router(farmers.router)
 
 
 @app.get("/")
 async def root():
-    """
-    Root endpoint - API information.
-    """
     return {
         "name": "AgriSense AI Backend",
         "version": "1.0.0",
@@ -51,14 +49,31 @@ async def root():
 
 @app.get("/health")
 async def app_health():
-    """
-    Application health check.
-    """
     return {"status": "ok", "service": "agrisense-backend"}
+
+
+@app.get("/api/pest-detection/{crop}")
+async def get_pest_detection(crop: str):
+    return {
+        "crop": crop,
+        "pests": [],
+        "risk_level": "low",
+        "recommendation": "Monitor crop regularly"
+    }
+
+
+@app.get("/api/crop-health")
+async def get_crop_health():
+    return {
+        "crops": [
+            {"name": "rice", "health": 85, "status": "healthy"},
+            {"name": "wheat", "health": 78, "status": "good"},
+            {"name": "cotton", "health": 72, "status": "fair"},
+            {"name": "tomato", "health": 90, "status": "excellent"}
+        ]
+    }
 
 
 if __name__ == "__main__":
     import uvicorn
-
-    # Run with: uvicorn app.main:app --reload --host 0.0.0.0 --port 8001
     uvicorn.run("app.main:app", host="0.0.0.0", port=8001, reload=True, log_level="info")
