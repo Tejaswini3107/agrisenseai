@@ -1,6 +1,6 @@
 import sys
 import os
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + "/../")
 
@@ -11,8 +11,12 @@ sys.modules['data_pipeline.collectors'] = MagicMock()
 sys.modules['data_pipeline.collectors.openweather'] = MagicMock()
 sys.modules['data_pipeline.collectors.nasa_power'] = MagicMock()
 
-from fastapi.testclient import TestClient  # noqa: E402
-from app.main import app  # noqa: E402
+with patch('app.database.init_db', return_value=None), \
+     patch('app.database.engine', MagicMock()), \
+     patch('app.database.Base.metadata.create_all', return_value=None):
+
+    from fastapi.testclient import TestClient  # noqa: E402
+    from app.main import app  # noqa: E402
 
 client = TestClient(app)
 
