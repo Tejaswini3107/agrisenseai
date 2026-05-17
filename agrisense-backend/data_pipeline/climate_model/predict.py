@@ -1,50 +1,43 @@
 import joblib
 import numpy as np
 import math
-from tensorflow.keras.models import load_model
 
-# Load all models and encoders at module level
+# Initialize all models as None
+crop_model = crop_encoder = None
+disease_model = disease_encoder = None
+stress_model = stress_encoder = None
+irrigation_model = None
+yield_model = None
+climate_model = climate_encoder = None
+scaler = None
+lstm_model = None
+
 print("Loading prediction models and encoders...")
 
 try:
-    # Crop recommendation model
+    from tensorflow.keras.models import load_model
+
     crop_model = joblib.load("models/crop_selector_model.pkl")
     crop_encoder = joblib.load("models/crop_encoder.pkl")
-
-    # Disease risk model
     disease_model = joblib.load("models/disease_risk_model.pkl")
     disease_encoder = joblib.load("models/disease_encoder.pkl")
-
-    # Plant stress model
     stress_model = joblib.load("models/plant_stress_model.pkl")
     stress_encoder = joblib.load("models/stress_encoder.pkl")
-
-    # Irrigation requirement model
     irrigation_model = joblib.load("models/irrigation_requirement_model.pkl")
-
-    # Yield prediction models
-    yield_model = joblib.load("models/climate_model.pkl")  # Crop yield
-
-    # Climate risk model
+    yield_model = joblib.load("models/climate_model.pkl")
     climate_model = joblib.load("models/climate_risk_model.pkl")
     climate_encoder = joblib.load("models/climate_risk_encoder.pkl")
-
-    # Feature scaler
     scaler = joblib.load("models/feature_scaler.pkl")
-
-    # LSTM weather model
     lstm_model = load_model("models/lstm_weather_model.keras")
-
     print("✓ All models and encoders loaded successfully")
 
 except FileNotFoundError as e:
     print(f"✗ Error loading model files: {e}")
-    print("Please ensure all model files are in the models/ directory")
-    raise
+    print("Running in fallback mode - predictions will use default values")
+
 except Exception as e:
     print(f"✗ Error loading models: {e}")
-    raise
-
+    print("Running in fallback mode - predictions will use default values")
 
 def build_feature_vector(weather_dict):
     """
