@@ -28,7 +28,7 @@ jobs:
 
       - name: Lint backend
         run: |
-          flake8 agrisense-backend/main.py \
+          flake8 agrisense-backend/app \
             agrisense-backend/app \
             agrisense-backend/tests \
             --max-line-length=120 \
