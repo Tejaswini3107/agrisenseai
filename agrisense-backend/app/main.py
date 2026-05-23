@@ -9,6 +9,7 @@ from app.routers import weather  # noqa: E402
 from app.routers import chatbot  # noqa: E402
 from app.routers import farmers  # noqa: E402
 from app.database import init_db  # noqa: E402
+from app.routers import admin_auth  # noqa: E402
 
 app = FastAPI(
     title="AgriSense AI Backend",
@@ -29,6 +30,7 @@ init_db()
 app.include_router(weather.router)
 app.include_router(chatbot.router)
 app.include_router(farmers.router)
+app.include_router(admin_auth.router)
 
 
 @app.get("/")
