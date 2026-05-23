@@ -180,10 +180,10 @@ jobs:
                 ports:
                  - "8000:8000"
                environment:
-                - DB_HOST=agrisense-db.cfoqq0o00rh0.eu-north-1.rds.amazonaws.com
-                - DB_USER=agrisense_admin
-                - DB_PASSWORD=sEBtT6U9fswuCeG
-                - HF_TOKEN=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
+                - DB_HOST=${{ secrets.DB_HOST }}
+                - DB_USER=${{ secrets.DB_USER }}
+                - DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+                - HF_TOKEN=${{ secrets.HF_TOKEN }}
               admin:
                 image: 561818313889.dkr.ecr.eu-north-1.amazonaws.com/agrisense-admin:latest
                 ports:
