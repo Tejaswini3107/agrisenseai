@@ -1,22 +1,25 @@
 "use client";
 
-export const dynamic = 'force-dynamic';
-
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (status === "unauthenticated") {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted && status === "unauthenticated") {
       router.push("/login");
     }
-  }, [status, router]);
+  }, [status, router, mounted]);
 
-  if (status === "loading") {
+  if (!mounted || status === "loading") {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <p className="text-gray-500">Loading...</p>
@@ -26,7 +29,6 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
       <div className="bg-white shadow-sm px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-2xl">🌱</span>
@@ -45,13 +47,11 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Content */}
       <div className="p-6">
         <h2 className="text-2xl font-bold text-gray-800 mb-6">
           Admin Dashboard
         </h2>
 
-        {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-white rounded-xl shadow-sm p-5">
             <p className="text-sm text-gray-500">Total Farmers</p>
@@ -71,7 +71,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* API Status */}
         <div className="bg-white rounded-xl shadow-sm p-5">
           <h3 className="text-lg font-semibold text-gray-700 mb-4">
             System Status
