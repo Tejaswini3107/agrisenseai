@@ -1,11 +1,10 @@
 from sqlalchemy import create_engine, Column, Integer, String, DateTime
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import declarative_base, sessionmaker
 import os
 from datetime import datetime
 
 DATABASE_URL = (
-    f"postgresql://{os.getenv('agrisense_admin')}:{os.getenv('DB_PASSWORD')}"
+    f"postgresql://{os.getenv('agrisense_admin')}:{os.getenv('sEBtT6U9fswuCeG')}"
     f"@{os.getenv('agrisense-db.cfoqq0o00rh0.eu-north-1.rds.amazonaws.com')}:5432/agrisense"
 )
 
@@ -26,7 +25,11 @@ class FarmerProfile(Base):
 
 
 def init_db():
-    Base.metadata.create_all(bind=engine)
+    try:
+        Base.metadata.create_all(bind=engine)
+    except Exception as e:
+        print(f"Database connection failed: {e}")
+        print("Running without database")
 
 
 def get_db():

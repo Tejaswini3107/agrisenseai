@@ -85,9 +85,7 @@ jobs:
           pip-audit -r agrisense-backend/requirements.txt \
             --ignore-vuln CVE-2025-43859 \
             --ignore-vuln CVE-2024-47874 \
-            --ignore-vuln CVE-2025-54121 \
-            --ignore-vuln PYSEC-2026-161 \
-            --ignore-vuln PYSEC-2024-277
+            --ignore-vuln CVE-2025-54121
 
       - name: Scan for hardcoded secrets
         uses: trufflesecurity/trufflehog@main
@@ -174,33 +172,12 @@ jobs:
             docker pull 561818313889.dkr.ecr.eu-north-1.amazonaws.com/agrisense-backend:latest
             docker pull 561818313889.dkr.ecr.eu-north-1.amazonaws.com/agrisense-admin:latest
             cd ~/agrisense
-
-            cat > docker-compose.yml << EOF
-            services:
-             backend:
-              image: 561818313889.dkr.ecr.eu-north-1.amazonaws.com/agrisense-backend:latest
-                ports:
-                 - "8000:8000"
-               environment:
-                - DB_HOST=${{ secrets.DB_HOST }}
-                - DB_USER=${{ secrets.DB_USER }}
-                - DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-                - HF_TOKEN=${{ secrets.HF_TOKEN }}
-              admin:
-                image: 561818313889.dkr.ecr.eu-north-1.amazonaws.com/agrisense-admin:latest
-                ports:
-                 - "3000:3000"
-            EOF
-            docker compose down
-            docker compose up -d
-
             export DB_HOST=$DB_HOST
             export DB_USER=$DB_USER
             export DB_PASSWORD=$DB_PASSWORD
             export HF_TOKEN=$HF_TOKEN
             docker compose -f docker-compose.prod.yml down
             docker compose -f docker-compose.prod.yml up -d
-
 
   # ─── Stage 7: Smoke Test ─────────────────────────────────
   smoke-test:
