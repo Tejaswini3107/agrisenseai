@@ -179,6 +179,9 @@ for loc in LOCATIONS:
         rain_7d = round(float(row["rainfall_mm"]) * 7, 1)
 
         irrigate, amount, etc = decide_irrigation(sm, days, rain_7d, crop, stage, et0)
+        if irrigate == "yes" and amount > 0:
+            noise = np.random.normal(0, amount * 0.10)
+            amount = int(np.clip(amount + noise, amount * 0.75, amount * 1.25))
 
         soil_moistures.append(sm)
         days_since_irr.append(days)
