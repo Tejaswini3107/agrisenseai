@@ -39,7 +39,7 @@ def load_data():
 def encode_features(df):
     feature_encoder = OrdinalEncoder(
         categories=[
-            ["rice", "wheat", "cotton", "tomato"],
+            ["rice", "wheat", "cotton", "sugarcane"],
             ["seedling", "vegetative", "flowering", "maturity"],
         ]
     )

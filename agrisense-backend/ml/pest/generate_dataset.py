@@ -18,14 +18,14 @@ LOCATIONS = [
     {"name": "karnataka", "lat": 15.3, "lon": 75.1},
 ]
 
-CROPS  = ["rice", "wheat", "cotton", "tomato"]
+CROPS  = ["rice", "wheat", "cotton", "sugarcane"]
 STAGES = ["seedling", "vegetative", "flowering", "maturity"]
 
 PEST_BY_CROP = {
-    "rice":   ["stem_borer", "leaf_miner", "aphids"],
-    "wheat":  ["aphids", "stem_borer", "leaf_miner"],
-    "cotton": ["bollworm", "whitefly", "aphids"],
-    "tomato": ["whitefly", "aphids", "bollworm"],
+    "rice":      ["stem_borer", "leaf_miner", "aphids"],
+    "wheat":     ["aphids", "stem_borer", "leaf_miner"],
+    "cotton":    ["bollworm", "whitefly", "aphids"],
+    "sugarcane": ["shoot_borer", "top_borer", "pyrilla"],
 }
 
 STAGE_RISK_WEIGHT = {
@@ -138,13 +138,16 @@ def select_pest_type(temperature, humidity, crop):
             return "whitefly"
         else:
             return "aphids"
-    else:  # tomato
-        if 25 <= temperature <= 33 and humidity > 70:
-            return "whitefly"
-        elif 25 <= temperature <= 30 and 60 <= humidity <= 70:
-            return "bollworm"
+    else:  # sugarcane
+        # shoot_borer (Chilo infuscatellus): warm + dry nights — Singh et al., Academia.edu/39823883
+        if temperature > 24 and humidity < 70:
+            return "shoot_borer"
+        # top_borer (Scirpophaga excerptalis): warm + humid — J. Asia-Pacific Entomol. 2021
+        elif 25 <= temperature <= 35 and 60 <= humidity <= 80:
+            return "top_borer"
+        # pyrilla (leaf hopper): moderate warm + high humidity — Egyptian J. Biol. Pest Control 2025
         else:
-            return "aphids"
+            return "pyrilla"
 
 
 def label_pest(score, crop, temperature, humidity):
