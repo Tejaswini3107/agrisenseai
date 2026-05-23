@@ -5,27 +5,29 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function DashboardPage() {
-  const { data: session, status } = useSession();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+  const sessionData = useSession();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
   useEffect(() => {
-    if (mounted && status === "unauthenticated") {
+    if (mounted && sessionData?.status === "unauthenticated") {
       router.push("/login");
     }
-  }, [status, router, mounted]);
+  }, [sessionData?.status, router, mounted]);
 
-  if (!mounted || status === "loading") {
+  if (!mounted || sessionData?.status === "loading") {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <p className="text-gray-500">Loading...</p>
       </div>
     );
   }
+
+  const session = sessionData?.data;
 
   return (
     <div className="min-h-screen bg-gray-50">
