@@ -33,3 +33,4 @@ MANIFEST
 htmlcov/
 .DS_Store
 .env.*.local
+*.md

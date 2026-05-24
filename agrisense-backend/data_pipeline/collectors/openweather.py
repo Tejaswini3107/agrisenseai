@@ -3,12 +3,21 @@ import os
 from dotenv import load_dotenv
 from datetime import datetime
 from fastapi import HTTPException
+import redis
+import json
 
 # Load environment variables
 load_dotenv()
 
 # Get API key
 API_KEY = os.getenv("OPENWEATHER_API_KEY")
+
+# Initialize Redis connection for caching
+try:
+    _redis = redis.from_url(os.getenv("REDIS_URL", "redis://localhost:6379"), decode_responses=True, socket_connect_timeout=2)
+    _redis.ping()
+except Exception:
+    _redis = None
 
 
 def get_current_weather(lat, lon):
@@ -26,6 +35,16 @@ def get_current_weather(lat, lon):
         HTTPException: If API call fails with status 503
     """
     try:
+        # Check cache first
+        cache_key = f"weather:current:{lat}:{lon}"
+        if _redis is not None:
+            try:
+                cached = _redis.get(cache_key)
+                if cached is not None:
+                    return json.loads(cached)
+            except Exception:
+                pass
+        
         url = "https://api.openweathermap.org/data/2.5/weather"
 
         params = {"lat": lat, "lon": lon, "appid": API_KEY, "units": "metric"}
@@ -44,6 +63,13 @@ def get_current_weather(lat, lon):
             "condition": data["weather"][0]["description"],
             "location_name": data["name"],
         }
+
+        # Cache the result (30 minute expiry)
+        if _redis is not None:
+            try:
+                _redis.setex(cache_key, 1800, json.dumps(weather_data))
+            except Exception:
+                pass
 
         return weather_data
 
@@ -68,6 +94,16 @@ def get_forecast(lat, lon):
         HTTPException: If API call fails with status 503
     """
     try:
+        # Check cache first
+        cache_key = f"weather:forecast:{lat}:{lon}"
+        if _redis is not None:
+            try:
+                cached = _redis.get(cache_key)
+                if cached is not None:
+                    return json.loads(cached)
+            except Exception:
+                pass
+        
         url = "https://api.openweathermap.org/data/2.5/forecast"
 
         params = {"lat": lat, "lon": lon, "appid": API_KEY, "units": "metric", "cnt": 40}
@@ -108,6 +144,13 @@ def get_forecast(lat, lon):
             }
 
             forecast_list.append(forecast_dict)
+
+        # Cache the result (6 hour expiry)
+        if _redis is not None:
+            try:
+                _redis.setex(cache_key, 21600, json.dumps(forecast_list))
+            except Exception:
+                pass
 
         return forecast_list
 
