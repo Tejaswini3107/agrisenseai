@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from data_pipeline.collectors.openweather import get_current_weather, get_forecast
+from data_pipeline.collectors.open_meteo import get_forecast_meteo
 from data_pipeline.collectors.nasa_power import get_soil_moisture
 from data_pipeline.climate_model.predict import predict_all
 
@@ -95,10 +96,21 @@ async def get_weather_forecast(lat: float, lon: float):
         HTTPException: 503 Service Unavailable on any error
     """
     try:
-        forecast_data = get_forecast(lat, lon)
-
+        # Try primary forecast source (OpenWeather)
+        try:
+            forecast_data = get_forecast(lat, lon)
+            if not forecast_data or isinstance(forecast_data, list) and len(forecast_data) == 0:
+                forecast_data = None
+        except Exception:
+            forecast_data = None
+        
+        # Fallback to Open-Meteo if primary fails
         if not forecast_data:
-            raise HTTPException(status_code=503, detail="Failed to fetch forecast data")
+            forecast_data = get_forecast_meteo(lat, lon)
+        
+        # If both sources fail
+        if not forecast_data:
+            raise HTTPException(status_code=503, detail="Weather forecast unavailable from all sources")
 
         return {"latitude": lat, "longitude": lon, "forecast": forecast_data}
 

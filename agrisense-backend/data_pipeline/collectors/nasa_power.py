@@ -2,6 +2,16 @@ import requests
 import pandas as pd
 from datetime import datetime, timedelta
 import numpy as np
+import redis
+import json
+import os
+
+# Initialize Redis connection for caching
+try:
+    _redis = redis.from_url(os.getenv("REDIS_URL", "redis://localhost:6379"), decode_responses=True, socket_connect_timeout=2)
+    _redis.ping()
+except Exception:
+    _redis = None
 
 
 def get_soil_moisture(lat, lon):
@@ -16,6 +26,16 @@ def get_soil_moisture(lat, lon):
         float: Average soil moisture (root zone) rounded to 4 decimal places,
                or None if request fails or no valid data.
     """
+    # Check cache first
+    cache_key = f"soil:{lat}:{lon}"
+    if _redis is not None:
+        try:
+            cached = _redis.get(cache_key)
+            if cached is not None:
+                return float(cached)
+        except Exception:
+            pass
+    
     # Calculate date range: today - 7 days to today
     today = datetime.utcnow()
     start_date = (today - timedelta(days=7)).strftime("%Y%m%d")
@@ -53,7 +73,16 @@ def get_soil_moisture(lat, lon):
 
         # Calculate and return average
         avg_moisture = np.mean(valid_values)
-        return round(avg_moisture, 4)
+        soil_moisture_percent = round(avg_moisture, 4)
+        
+        # Cache the result (24 hour expiry)
+        if _redis is not None:
+            try:
+                _redis.setex(cache_key, 86400, str(soil_moisture_percent))
+            except Exception:
+                pass
+        
+        return soil_moisture_percent
 
     except requests.RequestException as e:
         print(f"Error fetching soil moisture data: {e}")

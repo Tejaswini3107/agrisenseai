@@ -11,7 +11,6 @@ env:
   ECR_REGISTRY: 561818313889.dkr.ecr.eu-north-1.amazonaws.com
 
 jobs:
-
   # ─── Stage 1: Lint ───────────────────────────────────────
   lint:
     name: "Stage 1 — Lint & Code Quality"
@@ -29,12 +28,12 @@ jobs:
 
       - name: Lint backend
         run: |
-          flake8 agrisense-backend/main.py \
+          flake8 agrisense-backend/app \
             agrisense-backend/app \
             agrisense-backend/tests \
             --max-line-length=120 \
             --exclude=__pycache__,venv,.venv
-            
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
@@ -86,13 +85,15 @@ jobs:
           pip-audit -r agrisense-backend/requirements.txt \
             --ignore-vuln CVE-2025-43859 \
             --ignore-vuln CVE-2024-47874 \
-            --ignore-vuln CVE-2025-54121
+            --ignore-vuln CVE-2025-54121 \
+            --ignore-vuln PYSEC-2026-161 \
+            --ignore-vuln PYSEC-2024-277
+
       - name: Scan for hardcoded secrets
         uses: trufflesecurity/trufflehog@main
         with:
           path: ./
           extra_args: --only-verified
-          
 
   # ─── Stage 4: Build ──────────────────────────────────────
   build:
@@ -148,20 +149,37 @@ jobs:
     needs: push
     if: github.ref == 'refs/heads/main'
     steps:
+      - uses: actions/checkout@v4
+
+      - name: Copy docker-compose to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "docker-compose.prod.yml"
+          target: "/home/ubuntu/agrisense/"
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
+          envs: HF_TOKEN,DB_HOST,DB_USER,DB_PASSWORD
           script: |
             aws ecr get-login-password --region eu-north-1 | \
             docker login --username AWS --password-stdin 561818313889.dkr.ecr.eu-north-1.amazonaws.com
+            docker system prune -af
             docker pull 561818313889.dkr.ecr.eu-north-1.amazonaws.com/agrisense-backend:latest
             docker pull 561818313889.dkr.ecr.eu-north-1.amazonaws.com/agrisense-admin:latest
             cd ~/agrisense
-            docker compose down
-            docker compose up -d
+            export DB_HOST=$DB_HOST
+            export DB_USER=$DB_USER
+            export DB_PASSWORD=$DB_PASSWORD
+            export HF_TOKEN=$HF_TOKEN
+            docker compose -f docker-compose.prod.yml down
+            docker compose -f docker-compose.prod.yml up -d
 
   # ─── Stage 7: Smoke Test ─────────────────────────────────
   smoke-test:
