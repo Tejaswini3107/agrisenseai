@@ -54,6 +54,11 @@ def build_feature_vector(weather_dict):
     R = weather_dict.get("rainfall_mm", 0.0)
     W = weather_dict.get("wind_speed", 10.0)
 
+    T = float(np.clip(T, -10, 60))
+    H = float(np.clip(H, 0, 100))
+    R = float(np.clip(R, 0, 500))
+    W = float(np.clip(W, 0, 150))
+
     # Compute heat index (°C)
     # Formula: -8.78469 + 1.61139*T + 2.33855*H - 0.14611*T*H - 0.01230*T^2 - 0.01642*H^2
     heat_index = -8.78469 + 1.61139 * T + 2.33855 * H - 0.14611 * T * H - 0.01230 * (T**2) - 0.01642 * (H**2)
@@ -205,7 +210,7 @@ def forecast_weather(last_7_days):
         None: LSTM model not yet available
     """
     if lstm_model is None:
-        print("⚠ LSTM weather forecast model not yet trained")
+        print("LSTM weather forecast model not yet trained")
         return None
 
     try:
@@ -270,17 +275,17 @@ if __name__ == "__main__":
     # Test weather data
     test_weather = {"temperature": 28.5, "humidity": 72.0, "rainfall_mm": 15.0, "wind_speed": 12.5}
 
-    print("\n📍 Test Weather Input:")
+    print("\n  Test Weather Input:")
     print(f"   Temperature: {test_weather['temperature']}°C")
     print(f"   Humidity: {test_weather['humidity']}%")
     print(f"   Rainfall: {test_weather['rainfall_mm']}mm")
     print(f"   Wind Speed: {test_weather['wind_speed']} km/h")
 
     # Make predictions
-    print("\n🔮 Running all predictions...")
+    print("\n Running all predictions...")
     predictions = predict_all(test_weather)
 
-    print("\n✓ All Predictions:")
+    print("\n  All Predictions:")
     print(f"   Recommended Crop: {predictions['recommended_crop']} (confidence: {predictions['crop_confidence']})")
     print(f"   Disease Risk: {predictions['disease_risk']} (confidence: {predictions['disease_confidence']})")
     print(f"   Plant Stress: {predictions['plant_stress']} (confidence: {predictions['stress_confidence']})")
