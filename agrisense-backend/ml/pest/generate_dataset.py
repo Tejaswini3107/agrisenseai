@@ -18,21 +18,21 @@ LOCATIONS = [
     {"name": "karnataka", "lat": 15.3, "lon": 75.1},
 ]
 
-CROPS = ["rice", "wheat", "cotton", "tomato"]
+CROPS  = ["rice", "wheat", "cotton", "sugarcane"]
 STAGES = ["seedling", "vegetative", "flowering", "maturity"]
 
 PEST_BY_CROP = {
-    "rice": ["stem_borer", "leaf_miner", "aphids"],
-    "wheat": ["aphids", "stem_borer", "leaf_miner"],
-    "cotton": ["bollworm", "whitefly", "aphids"],
-    "tomato": ["whitefly", "aphids", "bollworm"],
+    "rice":      ["stem_borer", "leaf_miner", "aphids"],
+    "wheat":     ["aphids", "stem_borer", "leaf_miner"],
+    "cotton":    ["bollworm", "whitefly", "aphids"],
+    "sugarcane": ["shoot_borer", "top_borer", "pyrilla"],
 }
 
 STAGE_RISK_WEIGHT = {
-    "seedling": 0.05,
+    "seedling":   0.05,
     "vegetative": 0.15,
-    "flowering": 0.25,
-    "maturity": 0.10,
+    "flowering":  0.25,
+    "maturity":   0.10,
 }
 
 
@@ -40,33 +40,31 @@ def fetch_nasa_weather(lat, lon, start, end):
     url = "https://power.larc.nasa.gov/api/temporal/daily/point"
     params = {
         "parameters": "T2M,RH2M,PRECTOTCORR,WS2M",
-        "community": "AG",
-        "longitude": lon,
-        "latitude": lat,
-        "start": start,
-        "end": end,
-        "format": "JSON",
+        "community":  "AG",
+        "longitude":  lon,
+        "latitude":   lat,
+        "start":      start,
+        "end":        end,
+        "format":     "JSON",
     }
     response = requests.get(url, params=params, timeout=60)
     response.raise_for_status()
     data = response.json()["properties"]["parameter"]
 
-    dates = list(data["T2M"].keys())
+    dates        = list(data["T2M"].keys())
     temperatures = list(data["T2M"].values())
-    humidities = list(data["RH2M"].values())
-    rainfalls = list(data["PRECTOTCORR"].values())
+    humidities   = list(data["RH2M"].values())
+    rainfalls    = list(data["PRECTOTCORR"].values())
     # NASA gives wind in metres per second. Multiply by 3.6 to get km/h.
-    wind_speeds = [v * 3.6 for v in data["WS2M"].values()]
+    wind_speeds  = [v * 3.6 for v in data["WS2M"].values()]
 
-    df = pd.DataFrame(
-        {
-            "date": dates,
-            "temperature": temperatures,
-            "humidity": humidities,
-            "rainfall_mm": rainfalls,
-            "wind_speed": wind_speeds,
-        }
-    )
+    df = pd.DataFrame({
+        "date":        dates,
+        "temperature": temperatures,
+        "humidity":    humidities,
+        "rainfall_mm": rainfalls,
+        "wind_speed":  wind_speeds,
+    })
 
     df.replace(-999.0, np.nan, inplace=True)
     df.dropna(inplace=True)
@@ -107,19 +105,58 @@ def compute_pest_risk(temperature, humidity, rainfall_mm, wind_speed, crop, stag
         score *= 1.5
 
     # adding some noise to make the dataset more realistic
-
     noise = np.random.normal(0, 0.04)
     score = float(np.clip(score + noise, 0.0, 1.0))
     return score
 
 
-def label_pest(score, crop):
+def select_pest_type(temperature, humidity, crop):
+    # Thresholds derived from peer-reviewed sources:
+    # Stem borer (Scirpophaga incertulas): Sanyal et al. (2025), PLoS One — PMC11882091
+    # Leaf miner (Liriomyza spp.): Capinera, UF/IFAS EDIS EENY-255
+    # Aphids (Sitobion avenae / Aphis gossypii): Honěk & Martinková (2014), PLoS One — PMC4153587
+    # Bollworm (Helicoverpa armigera): Virachack et al. (2018), J. Fac. Agric. Kyushu Univ.
+    # Whitefly (Bemisia tabaci): Kanakala & Ghanim (2020), Insects — PMC7564875
+    if crop == "rice":
+        if temperature >= 28 and humidity > 70:
+            return "stem_borer"
+        elif 22 <= temperature <= 28 and 60 <= humidity <= 80:
+            return "leaf_miner"
+        else:
+            return "aphids"
+    elif crop == "wheat":
+        if temperature <= 28 and humidity >= 50:
+            return "aphids"
+        elif temperature > 28 and humidity > 70:
+            return "stem_borer"
+        else:
+            return "leaf_miner"
+    elif crop == "cotton":
+        if 25 <= temperature <= 33 and humidity <= 70:
+            return "bollworm"
+        elif temperature >= 25 and humidity > 70:
+            return "whitefly"
+        else:
+            return "aphids"
+    else:  # sugarcane
+        # shoot_borer (Chilo infuscatellus): warm + dry nights — Singh et al., Academia.edu/39823883
+        if temperature > 24 and humidity < 70:
+            return "shoot_borer"
+        # top_borer (Scirpophaga excerptalis): warm + humid — J. Asia-Pacific Entomol. 2021
+        elif 25 <= temperature <= 35 and 60 <= humidity <= 80:
+            return "top_borer"
+        # pyrilla (leaf hopper): moderate warm + high humidity — Egyptian J. Biol. Pest Control 2025
+        else:
+            return "pyrilla"
+
+
+def label_pest(score, crop, temperature, humidity):
     if score < 0.50:
         return "low", "none"
-    elif score < 0.73:
-        return "medium", np.random.choice(PEST_BY_CROP[crop])
     else:
-        return "high", PEST_BY_CROP[crop][0]
+        pest = select_pest_type(temperature, humidity, crop)
+        risk = "medium" if score < 0.73 else "high"
+        return risk, pest
 
 
 all_frames = []
@@ -127,17 +164,17 @@ all_frames = []
 for loc in LOCATIONS:
     print(f"Fetching data for {loc['name']}...")
     try:
-        df = fetch_nasa_weather(loc["lat"], loc["lon"], "20190101", "20231231")
+        df = fetch_nasa_weather(loc["lat"], loc["lon"], "20150101", "20251231")
         time.sleep(1)
     except Exception as e:
         print(f"  Failed: {e}")
         continue
 
     n = len(df)
-    df["crop_type"] = np.random.choice(CROPS, size=n)
-    df["growth_stage"] = np.random.choice(STAGES, size=n)
-    df["previous_pest_occurrence"] = np.random.choice([0, 1], size=n, p=[0.65, 0.35])
-    df["location"] = loc["name"]
+    df["crop_type"]                = np.random.choice(CROPS,   size=n)
+    df["growth_stage"]             = np.random.choice(STAGES,  size=n)
+    df["previous_pest_occurrence"] = np.random.choice([0, 1],  size=n, p=[0.65, 0.35])
+    df["location"]                 = loc["name"]
 
     pest_risks = []
     pest_types = []
@@ -152,7 +189,7 @@ for loc in LOCATIONS:
             row["growth_stage"],
             row["previous_pest_occurrence"],
         )
-        risk, pest = label_pest(score, row["crop_type"])
+        risk, pest = label_pest(score, row["crop_type"], row["temperature"], row["humidity"])
         pest_risks.append(risk)
         pest_types.append(pest)
 
