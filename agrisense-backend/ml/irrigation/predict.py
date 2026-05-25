@@ -6,10 +6,13 @@ import pandas as pd
 _BASE_DIR   = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 _MODELS_DIR = os.path.join(_BASE_DIR, "models")
 
-_clf = joblib.load(os.path.join(_MODELS_DIR, "irrigation_model.pkl"))
-_reg = joblib.load(os.path.join(_MODELS_DIR, "irrigation_amount_model.pkl"))
-_enc = joblib.load(os.path.join(_MODELS_DIR, "irrigation_encoder.pkl"))
-_feature_encoder = joblib.load(os.path.join(_MODELS_DIR, "irrigation_feature_encoder.pkl"))
+try:
+    _clf = joblib.load(os.path.join(_MODELS_DIR, "irrigation_model.pkl"))
+    _reg = joblib.load(os.path.join(_MODELS_DIR, "irrigation_amount_model.pkl"))
+    _enc = joblib.load(os.path.join(_MODELS_DIR, "irrigation_encoder.pkl"))
+    _feature_encoder = joblib.load(os.path.join(_MODELS_DIR, "irrigation_feature_encoder.pkl"))
+except FileNotFoundError:
+    _clf = _reg = _enc = _feature_encoder = None
 
 FEATURE_COLS = [
     "temperature",
@@ -25,6 +28,9 @@ FEATURE_COLS = [
 
 
 def predict(features: dict) -> dict:
+    if _clf is None:
+        raise RuntimeError("Irrigation models not found. Run ml/irrigation/train.py first.")
+
     cat = pd.DataFrame(
         [[features["crop_type"], features["growth_stage"]]],
         columns=["crop_type", "growth_stage"]
