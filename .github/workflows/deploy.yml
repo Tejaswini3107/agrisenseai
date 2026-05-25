@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - feature/Adminchanges_Jeet
+      - fix/lint-errors
 
 env:
   AWS_REGION: eu-north-1

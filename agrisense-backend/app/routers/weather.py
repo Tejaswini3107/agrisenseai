@@ -103,11 +103,11 @@ async def get_weather_forecast(lat: float, lon: float):
                 forecast_data = None
         except Exception:
             forecast_data = None
-        
+
         # Fallback to Open-Meteo if primary fails
         if not forecast_data:
             forecast_data = get_forecast_meteo(lat, lon)
-        
+
         # If both sources fail
         if not forecast_data:
             raise HTTPException(status_code=503, detail="Weather forecast unavailable from all sources")
