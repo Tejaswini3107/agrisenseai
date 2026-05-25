@@ -10,6 +10,7 @@ sys.modules['data_pipeline.climate_model.predict'] = MagicMock()
 sys.modules['data_pipeline.collectors'] = MagicMock()
 sys.modules['data_pipeline.collectors.openweather'] = MagicMock()
 sys.modules['data_pipeline.collectors.nasa_power'] = MagicMock()
+sys.modules['data_pipeline.collectors.open_meteo'] = MagicMock()
 
 with patch('app.database.init_db', return_value=None), \
      patch('app.database.engine', MagicMock()), \
