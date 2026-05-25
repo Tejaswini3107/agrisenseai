@@ -1,6 +1,9 @@
 from fastapi import APIRouter, HTTPException
 from data_pipeline.collectors.openweather import get_current_weather, get_forecast
-from data_pipeline.collectors.open_meteo import get_forecast_meteo
+try:
+    from data_pipeline.collectors.open_meteo import get_forecast_meteo
+except ImportError:
+    get_forecast_meteo = None
 from data_pipeline.collectors.nasa_power import get_soil_moisture
 from data_pipeline.climate_model.predict import predict_all
 
@@ -105,7 +108,7 @@ async def get_weather_forecast(lat: float, lon: float):
             forecast_data = None
         
         # Fallback to Open-Meteo if primary fails
-        if not forecast_data:
+        if not forecast_data and get_forecast_meteo is not None:
             forecast_data = get_forecast_meteo(lat, lon)
         
         # If both sources fail

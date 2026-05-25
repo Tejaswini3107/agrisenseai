@@ -32,6 +32,11 @@ agrisense-mobile/ios/Pods/**
 agrisense-mobile/ios/Build/
 agrisense-mobile/ios/DerivedData/
 
+# Markdown documentation files
+*.md
+*.kate-swp
+*.swp
+
 # Word documents and temporary Office files
 *.docx
 *.doc
