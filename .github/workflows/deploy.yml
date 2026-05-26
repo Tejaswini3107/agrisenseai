@@ -3,8 +3,7 @@ name: AgriSense AI — 7 Stage Pipeline
 on:
   push:
     branches:
-      - main
-      - feature/Adminchanges_Jeet
+      - main    
 
 env:
   AWS_REGION: eu-north-1
