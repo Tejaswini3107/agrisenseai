@@ -1,5 +1,7 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
+from fastapi.responses import PlainTextResponse
 from data_pipeline.collectors.openweather import get_current_weather, get_forecast
+from data_pipeline.collectors.open_meteo import get_forecast_meteo, get_current_weather_meteo
 from data_pipeline.collectors.nasa_power import get_soil_moisture
 from data_pipeline.climate_model.predict import predict_all
 
@@ -27,8 +29,11 @@ async def get_current_weather_with_predictions(lat: float, lon: float):
         HTTPException: 503 Service Unavailable on any error
     """
     try:
-        # Fetch current weather from OpenWeather
-        weather_dict = get_current_weather(lat, lon)
+        # Prefer Open-Meteo (real-time, no API key, no stale cache issues).
+        # Fall back to OpenWeatherMap if Open-Meteo fails.
+        weather_dict = get_current_weather_meteo(lat, lon)
+        if not weather_dict:
+            weather_dict = get_current_weather(lat, lon)
 
         if not weather_dict or "error" in weather_dict:
             raise HTTPException(status_code=503, detail="Failed to fetch current weather data")
@@ -95,10 +100,21 @@ async def get_weather_forecast(lat: float, lon: float):
         HTTPException: 503 Service Unavailable on any error
     """
     try:
-        forecast_data = get_forecast(lat, lon)
+        # Prefer Open-Meteo (real-time, no API key, includes condition strings via WMO codes).
+        forecast_data = get_forecast_meteo(lat, lon)
 
+        # Fallback to OpenWeatherMap if Open-Meteo fails
         if not forecast_data:
-            raise HTTPException(status_code=503, detail="Failed to fetch forecast data")
+            try:
+                forecast_data = get_forecast(lat, lon)
+                if not forecast_data or (isinstance(forecast_data, list) and len(forecast_data) == 0):
+                    forecast_data = None
+            except Exception:
+                forecast_data = None
+
+        # If both sources fail
+        if not forecast_data:
+            raise HTTPException(status_code=503, detail="Weather forecast unavailable from all sources")
 
         return {"latitude": lat, "longitude": lon, "forecast": forecast_data}
 
@@ -107,6 +123,51 @@ async def get_weather_forecast(lat: float, lon: float):
     except Exception as e:
         print(f"Error in /forecast endpoint: {e}")
         raise HTTPException(status_code=503, detail=f"Forecast service error: {str(e)}")
+
+
+@router.get("/forecast-readable")
+async def get_weather_forecast_readable(
+    lat: float,
+    lon: float,
+    output: str = Query(default="json", pattern="^(json|csv)$"),
+):
+    """Get forecast in a more understandable JSON shape or CSV table."""
+    payload = await get_weather_forecast(lat, lon)
+    forecast = payload.get("forecast", [])
+
+    readable_rows = []
+    for item in forecast:
+        readable_rows.append(
+            {
+                "date": item.get("date"),
+                "temperature_c": item.get("temperature"),
+                "humidity_percent": item.get("humidity"),
+                "rainfall_mm": item.get("rainfall_mm"),
+                "wind_speed_kmh": item.get("wind_speed"),
+                "condition": item.get("condition"),
+            }
+        )
+
+    if output == "csv":
+        lines = ["date,temperature_c,humidity_percent,rainfall_mm,wind_speed_kmh,condition"]
+        for row in readable_rows:
+            lines.append(
+                f"{row['date']},{row['temperature_c']},{row['humidity_percent']},"
+                f"{row['rainfall_mm']},{row['wind_speed_kmh']},{row.get('condition') or ''}"
+            )
+        return PlainTextResponse(content="\n".join(lines), media_type="text/csv")
+
+    return {
+        "latitude": lat,
+        "longitude": lon,
+        "units": {
+            "temperature": "celsius",
+            "humidity": "percent",
+            "rainfall": "mm",
+            "wind_speed": "km/h",
+        },
+        "forecast": readable_rows,
+    }
 
 
 @router.get("/health")
