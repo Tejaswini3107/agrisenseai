@@ -1,4 +1,10 @@
 PODS:
+  - AppAuth (1.7.6):
+    - AppAuth/Core (= 1.7.6)
+    - AppAuth/ExternalUserAgent (= 1.7.6)
+  - AppAuth/Core (1.7.6)
+  - AppAuth/ExternalUserAgent (1.7.6):
+    - AppAuth/Core
   - boost (1.83.0)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.73.11)
@@ -11,10 +17,28 @@ PODS:
     - ReactCommon/turbomodule/core (= 0.73.11)
   - fmt (6.2.1)
   - glog (0.3.5)
+  - GoogleSignIn (7.1.0):
+    - AppAuth (< 2.0, >= 1.7.3)
+    - GTMAppAuth (< 5.0, >= 4.1.1)
+    - GTMSessionFetcher/Core (~> 3.3)
+  - GTMAppAuth (4.1.1):
+    - AppAuth/Core (~> 1.7)
+    - GTMSessionFetcher/Core (< 4.0, >= 3.3)
+  - GTMSessionFetcher/Core (3.5.0)
   - hermes-engine (0.73.11):
     - hermes-engine/Pre-built (= 0.73.11)
   - hermes-engine/Pre-built (0.73.11)
   - libevent (2.1.12)
+  - OneSignalXCFramework (3.12.10):
+    - OneSignalXCFramework/OneSignalCore (= 3.12.10)
+    - OneSignalXCFramework/OneSignalExtension (= 3.12.10)
+    - OneSignalXCFramework/OneSignalOutcomes (= 3.12.10)
+  - OneSignalXCFramework/OneSignalCore (3.12.10)
+  - OneSignalXCFramework/OneSignalExtension (3.12.10):
+    - OneSignalXCFramework/OneSignalCore
+    - OneSignalXCFramework/OneSignalOutcomes
+  - OneSignalXCFramework/OneSignalOutcomes (3.12.10):
+    - OneSignalXCFramework/OneSignalCore
   - RCT-Folly (2022.05.16.00):
     - boost
     - DoubleConversion
@@ -886,6 +910,11 @@ PODS:
   - React-Mapbuffer (0.73.11):
     - glog
     - React-debug
+  - react-native-onesignal (4.5.4):
+    - OneSignalXCFramework (= 3.12.10)
+    - React (< 1.0.0, >= 0.13.0)
+  - react-native-restart (0.0.27):
+    - React-Core
   - react-native-safe-area-context (4.14.1):
     - React-Core
   - React-nativeconfig (0.73.11)
@@ -1055,9 +1084,16 @@ PODS:
     - React-jsi (= 0.73.11)
     - React-logger (= 0.73.11)
     - React-perflogger (= 0.73.11)
+  - RNCAsyncStorage (1.23.1):
+    - React-Core
+  - RNFS (2.20.0):
+    - React-Core
   - RNGestureHandler (2.31.1):
     - glog
     - RCT-Folly (= 2022.05.16.00)
+    - React-Core
+  - RNGoogleSignin (13.1.0):
+    - GoogleSignIn (~> 7.1)
     - React-Core
   - RNScreens (3.37.0):
     - glog
@@ -1065,6 +1101,10 @@ PODS:
     - React-Core
     - React-RCTImage
   - RNSVG (14.2.0):
+    - React-Core
+  - RNVectorIcons (10.3.0):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
     - React-Core
   - SocketRocket (0.6.1)
   - Yoga (1.14.0)
@@ -1100,6 +1140,8 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector-modern`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
+  - react-native-onesignal (from `../node_modules/react-native-onesignal`)
+  - react-native-restart (from `../node_modules/react-native-restart`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
@@ -1121,15 +1163,24 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
+  - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
+  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
   trunk:
+    - AppAuth
     - fmt
+    - GoogleSignIn
+    - GTMAppAuth
+    - GTMSessionFetcher
     - libevent
+    - OneSignalXCFramework
     - SocketRocket
 
 EXTERNAL SOURCES:
@@ -1188,6 +1239,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   React-Mapbuffer:
     :path: "../node_modules/react-native/ReactCommon"
+  react-native-onesignal:
+    :path: "../node_modules/react-native-onesignal"
+  react-native-restart:
+    :path: "../node_modules/react-native-restart"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   React-nativeconfig:
@@ -1230,24 +1285,37 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNCAsyncStorage:
+    :path: "../node_modules/@react-native-async-storage/async-storage"
+  RNFS:
+    :path: "../node_modules/react-native-fs"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNGoogleSignin:
+    :path: "../node_modules/@react-native-google-signin/google-signin"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   RNSVG:
     :path: "../node_modules/react-native-svg"
+  RNVectorIcons:
+    :path: "../node_modules/react-native-vector-icons"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  AppAuth: d4f13a8fe0baf391b2108511793e4b479691fb73
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
   FBLazyVector: b46891061bfe0a9b07f601813114c8653a72a45c
   FBReactNativeSpec: 9a01850c21d81027fa7b20b9dcc25d9bfae083da
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: c5d68082e772fa1c511173d6b30a9de2c05a69a2
+  GoogleSignIn: d4281ab6cf21542b1cfaff85c191f230b399d2db
+  GTMAppAuth: f69bd07d68cd3b766125f7e072c45d7340dea0de
+  GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   hermes-engine: d992945b77c506e5164e6a9a77510c9d57472c59
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
+  OneSignalXCFramework: e458f7a374192598a1d66418e1b61481c3cdf0e9
   RCT-Folly: cd21f1661364f975ae76b3308167ad66b09f53f5
   RCTRequired: 415e56f7c33799a6483e41e4dce607f3daf1e69b
   RCTTypeSafety: e984a88e713281c2d8c2309a1a6d2775af0107ae
@@ -1269,6 +1337,8 @@ SPEC CHECKSUMS:
   React-jsinspector: a98428936fb888cc15d857226a26d9ac0a668a0e
   React-logger: 6e4873d1f9c54cca30f6c91a6617f8c91b75ba4c
   React-Mapbuffer: 57bf49a458398d329dad2bf8bc660e3e35b96989
+  react-native-onesignal: 8d8f7d5e2cc44239fc0ec72fe9c6d27b939870fc
+  react-native-restart: 0bc732f4461709022a742bb29bcccf6bbc5b4863
   react-native-safe-area-context: 758e894ca5a9bd1868d2a9cfbca7326a2b6bf9dc
   React-nativeconfig: 8fd29a35a3e4e8c37682d976667663d834ba6165
   React-NativeModulesApple: 83d7077877f8eda8e1b6055b3f8f16f7db8463b5
@@ -1290,12 +1360,16 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 398069b748d97567cc7585cc9a97284ad19d72fa
   React-utils: e8549669b504c18929b2e9aa4d87657e530a91a4
   ReactCommon: 9c38e8797dc2ac72edf63cd18cf450d918575666
+  RNCAsyncStorage: aa75595c1aefa18f868452091fa0c411a516ce11
+  RNFS: 89de7d7f4c0f6bafa05343c578f61118c8282ed8
   RNGestureHandler: 0e60e6ee9fe52fa743934feaf8e67410a95ae2cb
+  RNGoogleSignin: ba93c1137f8d5cebdd39b04f493fd212ddf5ecd6
   RNScreens: 3ce54903891fd6281865ad3e7cfe4c2bb438c70c
   RNSVG: 043f603fc70d48d289bc3f2ceedbb05ce2636f5c
+  RNVectorIcons: 24c506ef3aab67787a85607b8d4a312ce8f6f3b0
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: a813a6d82538ccba91c54406404e3ed80b48a692
 
-PODFILE CHECKSUM: f542f0d5eb0ddbe3b0490d4a985d60ccba5193d2
+PODFILE CHECKSUM: b3a858b0aa9dce31876eba067d0129f9c2cf5852
 
 COCOAPODS: 1.16.2

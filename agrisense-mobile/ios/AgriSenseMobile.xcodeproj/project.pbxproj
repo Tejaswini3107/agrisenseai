@@ -3,29 +3,31 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A4FD6CDE85178D74C8844A8 /* libPods-AgriSenseMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5710E04922817601AFC0D63 /* libPods-AgriSenseMobile.a */; };
 		1A1A1A1A1A1A1A1A1A1A1A01 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A1A1A1A1A1A1A1A1A1A1A11 /* AppDelegate.m */; };
 		1A1A1A1A1A1A1A1A1A1A1A02 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A1A1A1A1A1A1A1A1A1A1A12 /* main.m */; };
 		1A1A1A1A1A1A1A1A1A1A1A03 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A1A1A1A1A1A1A1A1A1A1A13 /* LaunchScreen.storyboard */; };
 		1A1A1A1A1A1A1A1A1A1A1A04 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A1A1A1A1A1A1A1A1A1A1A14 /* Images.xcassets */; };
 		358BBA873FAF9FA044FA91F8 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = FF3CAE8FC327626C110B44C3 /* PrivacyInfo.xcprivacy */; };
-		D15F25B71195D238BCDC5280 /* libPods-AgriSenseMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5299A34C92FE08051309A00 /* libPods-AgriSenseMobile.a */; };
+		AABBCC001122AACC /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = AABBCC001122AABB /* main.jsbundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0CD1FA7409BB3015791541DC /* Pods-AgriSenseMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgriSenseMobile.debug.xcconfig"; path = "Target Support Files/Pods-AgriSenseMobile/Pods-AgriSenseMobile.debug.xcconfig"; sourceTree = "<group>"; };
 		1A1A1A1A1A1A1A1A1A1A1A10 /* AgriSenseMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AgriSenseMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A1A1A1A1A1A1A1A1A1A1A11 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		1A1A1A1A1A1A1A1A1A1A1A12 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		1A1A1A1A1A1A1A1A1A1A1A13 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1A1A1A1A1A1A1A1A1A1A1A14 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		1A1A1A1A1A1A1A1A1A1A1A15 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7C965D568E7C66477BDFD8FF /* Pods-AgriSenseMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgriSenseMobile.release.xcconfig"; path = "Target Support Files/Pods-AgriSenseMobile/Pods-AgriSenseMobile.release.xcconfig"; sourceTree = "<group>"; };
-		C5299A34C92FE08051309A00 /* libPods-AgriSenseMobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AgriSenseMobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		FE36D5D476EF0BCE8D842D5F /* Pods-AgriSenseMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgriSenseMobile.debug.xcconfig"; path = "Target Support Files/Pods-AgriSenseMobile/Pods-AgriSenseMobile.debug.xcconfig"; sourceTree = "<group>"; };
-		FF3CAE8FC327626C110B44C3 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = ../PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		AABBCC001122AABB /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = main.jsbundle; path = main.jsbundle; sourceTree = "<group>"; };
+		B6931AD253EDE77FCEBB90D5 /* Pods-AgriSenseMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AgriSenseMobile.release.xcconfig"; path = "Target Support Files/Pods-AgriSenseMobile/Pods-AgriSenseMobile.release.xcconfig"; sourceTree = "<group>"; };
+		C5710E04922817601AFC0D63 /* libPods-AgriSenseMobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AgriSenseMobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF3CAE8FC327626C110B44C3 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = PrivacyInfo.xcprivacy; path = ../PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,21 +35,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D15F25B71195D238BCDC5280 /* libPods-AgriSenseMobile.a in Frameworks */,
+				0A4FD6CDE85178D74C8844A8 /* libPods-AgriSenseMobile.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		021B85CBC6A401C9649839AA /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				C5299A34C92FE08051309A00 /* libPods-AgriSenseMobile.a */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		1A1A1A1A1A1A1A1A1A1A1A16 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -62,13 +56,14 @@
 				1A1A1A1A1A1A1A1A1A1A1A21 /* AgriSenseMobile */,
 				1A1A1A1A1A1A1A1A1A1A1A16 /* Products */,
 				C18A5F743CB8F7A7BB65E095 /* Pods */,
-				021B85CBC6A401C9649839AA /* Frameworks */,
+				A1509624D36A0C7A61EEA3AC /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 		1A1A1A1A1A1A1A1A1A1A1A21 /* AgriSenseMobile */ = {
 			isa = PBXGroup;
 			children = (
+				AABBCC001122AABB /* main.jsbundle */,
 				1A1A1A1A1A1A1A1A1A1A1A11 /* AppDelegate.m */,
 				1A1A1A1A1A1A1A1A1A1A1A12 /* main.m */,
 				1A1A1A1A1A1A1A1A1A1A1A13 /* LaunchScreen.storyboard */,
@@ -79,13 +74,20 @@
 			path = AgriSenseMobile;
 			sourceTree = "<group>";
 		};
+		A1509624D36A0C7A61EEA3AC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C5710E04922817601AFC0D63 /* libPods-AgriSenseMobile.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		C18A5F743CB8F7A7BB65E095 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				FE36D5D476EF0BCE8D842D5F /* Pods-AgriSenseMobile.debug.xcconfig */,
-				7C965D568E7C66477BDFD8FF /* Pods-AgriSenseMobile.release.xcconfig */,
+				0CD1FA7409BB3015791541DC /* Pods-AgriSenseMobile.debug.xcconfig */,
+				B6931AD253EDE77FCEBB90D5 /* Pods-AgriSenseMobile.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -96,13 +98,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1A1A1A1A1A1A1A1A1A1A1A40 /* Build configuration list for PBXNativeTarget "AgriSenseMobile" */;
 			buildPhases = (
-				880F6293C13D80E0B42775AF /* [CP] Check Pods Manifest.lock */,
+				51E795CCE8A21AA5290CCB63 /* [CP] Check Pods Manifest.lock */,
 				1A1A1A1A1A1A1A1A1A1A1A31 /* Sources */,
 				1A1A1A1A1A1A1A1A1A1A1A32 /* Frameworks */,
 				1A1A1A1A1A1A1A1A1A1A1A33 /* Resources */,
 				D4A95D81C88F4B54A6077F31 /* Bundle React Native code and images */,
-				278AA6280D92A74AA35DA64B /* [CP] Embed Pods Frameworks */,
-				CE2A4DEB19E2F36C9993A8FC /* [CP] Copy Pods Resources */,
+				FD4B940E8B96ED4E9CBB43A1 /* [CP] Embed Pods Frameworks */,
+				5761B92F3000EE9F7A94F24B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -149,6 +151,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AABBCC001122AACC /* main.jsbundle in Resources */,
 				1A1A1A1A1A1A1A1A1A1A1A03 /* LaunchScreen.storyboard in Resources */,
 				1A1A1A1A1A1A1A1A1A1A1A04 /* Images.xcassets in Resources */,
 				358BBA873FAF9FA044FA91F8 /* PrivacyInfo.xcprivacy in Resources */,
@@ -158,24 +161,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		278AA6280D92A74AA35DA64B /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-AgriSenseMobile/Pods-AgriSenseMobile-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-AgriSenseMobile/Pods-AgriSenseMobile-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AgriSenseMobile/Pods-AgriSenseMobile-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		880F6293C13D80E0B42775AF /* [CP] Check Pods Manifest.lock */ = {
+		51E795CCE8A21AA5290CCB63 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -197,7 +183,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		CE2A4DEB19E2F36C9993A8FC /* [CP] Copy Pods Resources */ = {
+		5761B92F3000EE9F7A94F24B /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -234,6 +220,23 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\nexport NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
+		FD4B940E8B96ED4E9CBB43A1 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AgriSenseMobile/Pods-AgriSenseMobile-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AgriSenseMobile/Pods-AgriSenseMobile-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AgriSenseMobile/Pods-AgriSenseMobile-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -259,9 +262,9 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 919676223144;
 				ENABLE_BITCODE = NO;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "i386 x86_64";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = AgriSenseMobile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -276,7 +279,7 @@
 					"$(inherited)",
 					" ",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.agrisense.mobile;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tejaswini.AgriSenseMobile;
 				PRODUCT_NAME = AgriSenseMobile;
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
@@ -297,9 +300,9 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 919676223144;
 				ENABLE_BITCODE = NO;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "i386 x86_64";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = AgriSenseMobile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -314,7 +317,7 @@
 					"$(inherited)",
 					" ",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.agrisense.mobile;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tejaswini.AgriSenseMobile;
 				PRODUCT_NAME = AgriSenseMobile;
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
@@ -327,13 +330,13 @@
 		};
 		1A1A1A1A1A1A1A1A1A1A1A62 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FE36D5D476EF0BCE8D842D5F /* Pods-AgriSenseMobile.debug.xcconfig */;
+			baseConfigurationReference = 0CD1FA7409BB3015791541DC /* Pods-AgriSenseMobile.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = BS96STJ4TL;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = AgriSenseMobile/Info.plist;
@@ -343,7 +346,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.agrisense.mobile;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tejaswini.AgriSenseMobile;
 				PRODUCT_NAME = AgriSenseMobile;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
@@ -353,13 +356,13 @@
 		};
 		1A1A1A1A1A1A1A1A1A1A1A63 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7C965D568E7C66477BDFD8FF /* Pods-AgriSenseMobile.release.xcconfig */;
+			baseConfigurationReference = B6931AD253EDE77FCEBB90D5 /* Pods-AgriSenseMobile.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = BS96STJ4TL;
 				ENABLE_BITCODE = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = AgriSenseMobile/Info.plist;
@@ -369,7 +372,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.agrisense.mobile;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tejaswini.AgriSenseMobile;
 				PRODUCT_NAME = AgriSenseMobile;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;

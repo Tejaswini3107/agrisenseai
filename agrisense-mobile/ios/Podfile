@@ -15,5 +15,29 @@ target 'AgriSenseMobile' do
 
   post_install do |installer|
     react_native_post_install(installer, config[:reactNativePath], :mac_catalyst_enabled => false)
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['CLANG_ENABLE_EXPLICIT_MODULES'] = 'NO'
+        config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'x86_64'
+      end
+    end
+    installer.pods_project.build_configurations.each do |config|
+      config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'x86_64'
+    end
+    # Xcode 26 runs ScanDependencies before pods are built, so module map files
+    # in PODS_CONFIGURATION_BUILD_DIR don't exist yet. Rewrite xcconfigs to use
+    # the static PODS_ROOT path which already exists.
+    installer.aggregate_targets.each do |agg_target|
+      ['debug', 'release'].each do |config_name|
+        xcconfig_path = agg_target.xcconfig_path(config_name)
+        next unless File.exist?(xcconfig_path)
+        content = File.read(xcconfig_path)
+        content.gsub!(
+          '-fmodule-map-file="${PODS_CONFIGURATION_BUILD_DIR}/GTMAppAuth/GTMAppAuth.modulemap"',
+          '-fmodule-map-file="${PODS_ROOT}/Headers/Public/GTMAppAuth/GTMAppAuth.modulemap"'
+        )
+        File.write(xcconfig_path, content)
+      end
+    end
   end
 end
