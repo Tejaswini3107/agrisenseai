@@ -56,17 +56,17 @@ def generate_climate_dataset():
     # Concatenate all DataFrames
     print(f"\nConcatenating {len(all_dataframes)} location datasets...")
     combined_df = pd.concat(all_dataframes, ignore_index=True)
-    print(f"✓ Combined dataset: {len(combined_df)} rows")
+    print(f" Combined dataset: {len(combined_df)} rows")
 
     # Apply data cleaning
     print("\nApplying data cleaning...")
     combined_df = clean_weather_dataframe(combined_df)
-    print(f"✓ After cleaning: {len(combined_df)} rows")
+    print(f" After cleaning: {len(combined_df)} rows")
 
     # Apply feature engineering
     print("\nApplying feature engineering...")
     combined_df = engineer_features(combined_df)
-    print(f"✓ Features engineered")
+    print(f" Features engineered")
 
     # Add crop yield column (realistic agricultural model)
     print("\nGenerating crop yield data based on climate factors...")
@@ -140,7 +140,7 @@ def generate_climate_dataset():
         return round(yield_value, 2)
 
     combined_df["crop_yield"] = combined_df.apply(calculate_crop_yield, axis=1)
-    print(f"✓ Crop yield generated")
+    print(f" Crop yield generated")
 
     # Compute climate risk based on weather factors
     def compute_climate_risk(row):
@@ -200,7 +200,7 @@ def generate_climate_dataset():
 
     print("\nComputing climate risk scores...")
     combined_df["climate_risk"] = combined_df.apply(compute_climate_risk, axis=1)
-    print(f"✓ Climate risk computed")
+    print(f" Climate risk computed")
 
     # Print climate risk distribution
     print(f"\nClimate Risk Distribution:")

@@ -32,11 +32,11 @@ def train_lstm_weather_forecast():
         scalers = joblib.load("data/sequences/scalers.pkl")
         weather_features = joblib.load("data/sequences/weather_features.pkl")
 
-        print(f"✓ X shape: {X.shape}")
-        print(f"✓ y shape: {y.shape}")
-        print(f"✓ Weather features: {weather_features}")
+        print(f" X shape: {X.shape}")
+        print(f" y shape: {y.shape}")
+        print(f" Weather features: {weather_features}")
     except FileNotFoundError:
-        print("✗ Error: Sequence files not found!")
+        print(" Error: Sequence files not found!")
         print("  Please run: python -m data_pipeline.climate_model.prepare_sequences")
         return
 
@@ -49,10 +49,10 @@ def train_lstm_weather_forecast():
     y_train = y[:split_idx]
     y_test = y[split_idx:]
 
-    print(f"✓ Training samples: {len(X_train)}")
-    print(f"✓ Testing samples: {len(X_test)}")
-    print(f"✓ Input shape: {X_train.shape}")
-    print(f"✓ Output shape: {y_train.shape}")
+    print(f" Training samples: {len(X_train)}")
+    print(f" Testing samples: {len(X_test)}")
+    print(f" Input shape: {X_train.shape}")
+    print(f" Output shape: {y_train.shape}")
 
     # Build LSTM model
     print("\n3. Building LSTM model...")
@@ -81,7 +81,7 @@ def train_lstm_weather_forecast():
     model.compile(optimizer="adam", loss="mse", metrics=["mae"])
 
     model.summary()
-    print(f"✓ Model built successfully")
+    print(f" Model built successfully")
 
     # Train model
     print("\n4. Training LSTM model...")
@@ -91,7 +91,7 @@ def train_lstm_weather_forecast():
         X_train, y_train, epochs=100, batch_size=32, validation_split=0.2, callbacks=[early_stop], verbose=1
     )
 
-    print("✓ Model training completed")
+    print(" Model training completed")
 
     # Evaluate on test set
     print("\n5. Evaluating model on test set...")
@@ -136,16 +136,16 @@ def train_lstm_weather_forecast():
     train_rmse = np.sqrt(mean_squared_error(y_train_original.reshape(-1), y_pred_train_original.reshape(-1)))
     test_rmse = np.sqrt(mean_squared_error(y_test_original.reshape(-1), y_pred_test_original.reshape(-1)))
 
-    print(f"\n✓ Training Metrics:")
+    print(f"\n Training Metrics:")
     print(f"   - MAE: {train_mae:.4f}")
     print(f"   - RMSE: {train_rmse:.4f}")
 
-    print(f"\n✓ Testing Metrics:")
+    print(f"\n Testing Metrics:")
     print(f"   - MAE: {test_mae:.4f}")
     print(f"   - RMSE: {test_rmse:.4f}")
 
     # Per-feature metrics
-    print(f"\n✓ Per-Feature Test Metrics:")
+    print(f"\n Per-Feature Test Metrics:")
     for i, feature in enumerate(weather_features):
         feature_mae = mean_absolute_error(
             y_test_original[:, :, i].reshape(-1), y_pred_test_original[:, :, i].reshape(-1)
@@ -161,12 +161,12 @@ def train_lstm_weather_forecast():
 
     model_path = "models/lstm_weather_model.keras"
     model.save(model_path)
-    print(f"✓ LSTM model saved to {model_path}")
+    print(f" LSTM model saved to {model_path}")
 
     # Save history
     history_path = "models/lstm_training_history.pkl"
     joblib.dump(history.history, history_path)
-    print(f"✓ Training history saved to {history_path}")
+    print(f" Training history saved to {history_path}")
 
     # Generate plots
     print("\n9. Generating visualizations...")
@@ -193,7 +193,7 @@ def train_lstm_weather_forecast():
     plt.tight_layout()
     history_fig_path = "models/lstm_training_history.png"
     plt.savefig(history_fig_path, dpi=300, bbox_inches="tight")
-    print(f"✓ Training history plot saved to {history_fig_path}")
+    print(f" Training history plot saved to {history_fig_path}")
     plt.close()
 
     # Predictions vs Actual (for first test sample across 3 days)
@@ -212,21 +212,21 @@ def train_lstm_weather_forecast():
     plt.tight_layout()
     pred_fig_path = "models/lstm_sample_predictions.png"
     plt.savefig(pred_fig_path, dpi=300, bbox_inches="tight")
-    print(f"✓ Predictions plot saved to {pred_fig_path}")
+    print(f" Predictions plot saved to {pred_fig_path}")
     plt.close()
 
     # Final summary
     print("\n" + "=" * 70)
     print("LSTM Weather Forecasting Model Training Complete!")
     print("=" * 70)
-    print(f"\n📊 Model Summary:")
+    print(f"\ Model Summary:")
     print(f"   - Architecture: LSTM(64) → LSTM(32) → Dense(32)")
     print(f"   - Input: 7 days of weather history")
     print(f"   - Output: 3-day weather forecast")
     print(f"   - Features: {', '.join(weather_features)}")
     print(f"   - Test MAE: {test_mae:.4f}")
     print(f"   - Test RMSE: {test_rmse:.4f}")
-    print(f"\n📁 Saved Files:")
+    print(f"\n Saved Files:")
     print(f"   - {model_path}")
     print(f"   - {history_path}")
     print(f"   - {history_fig_path}")

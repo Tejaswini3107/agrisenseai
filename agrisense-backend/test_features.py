@@ -84,7 +84,7 @@ rounded_check = all(
     for v in vpd_vals
     if isinstance(v, float)
 )
-print("✓" if rounded_check else "✗")
+print("" if rounded_check else "✗")
 print(f"  Values: {vpd_vals}")
 
 print("\nRainfall Category:")
@@ -157,12 +157,12 @@ flags_are_int = (
     and df_engineered['is_high_temp'].dtype in ['int64', 'int32']
 )
 
-print(f"✓ All {len(expected_columns)} expected columns present? {all_cols_present}")
-print(f"✓ No data loss (same rows)? {no_data_loss}")
-print(f"✓ Heat index clipped correctly? {heat_clipped}")
-print(f"✓ Vapor pressure deficit rounded to 4 decimals? {rounded_check}")
-print(f"✓ Rainfall categories correct types? {rainfall_type_ok}")
-print(f"✓ Humidity and temperature flags are integers? {flags_are_int}")
+print(f" All {len(expected_columns)} expected columns present? {all_cols_present}")
+print(f" No data loss (same rows)? {no_data_loss}")
+print(f" Heat index clipped correctly? {heat_clipped}")
+print(f" Vapor pressure deficit rounded to 4 decimals? {rounded_check}")
+print(f" Rainfall categories correct types? {rainfall_type_ok}")
+print(f" Humidity and temperature flags are integers? {flags_are_int}")
 
 print("\n" + "=" * 70)
 print("Tests completed successfully!")

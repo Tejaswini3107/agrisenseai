@@ -79,16 +79,16 @@ def train_disease_risk_model():
     print("\n1. Loading dataset...")
     try:
         df = pd.read_csv("data/climate_dataset.csv")
-        print(f"✓ Dataset loaded: {df.shape[0]} rows")
+        print(f" Dataset loaded: {df.shape[0]} rows")
     except FileNotFoundError:
-        print("✗ Error: data/climate_dataset.csv not found!")
+        print(" Error: data/climate_dataset.csv not found!")
         return
 
     # Generate disease risk labels
     print("\n2. Generating disease risk labels...")
     df["disease_risk"] = generate_disease_risk(df)
     risk_counts = df["disease_risk"].value_counts()
-    print(f"✓ Disease risk distribution:\n{risk_counts}")
+    print(f" Disease risk distribution:\n{risk_counts}")
 
     # Prepare features and target
     print("\n3. Preparing features and target...")
@@ -111,7 +111,7 @@ def train_disease_risk_model():
     disease_encoder = LabelEncoder()
     y_encoded = disease_encoder.fit_transform(y)
 
-    print(f"✓ Disease risk classes: {disease_encoder.classes_}")
+    print(f" Disease risk classes: {disease_encoder.classes_}")
 
     # Train-test split
     print("\n4. Splitting data...")
@@ -122,15 +122,15 @@ def train_disease_risk_model():
     model = RandomForestClassifier(n_estimators=150, random_state=42, n_jobs=-1)
 
     model.fit(X_train, y_train)
-    print("✓ Model training completed")
+    print(" Model training completed")
 
     # Evaluate
     print("\n6. Evaluating model...")
     y_pred = model.predict(X_test)
     accuracy = accuracy_score(y_test, y_pred)
 
-    print(f"\n✓ Accuracy: {accuracy:.4f}")
-    print(f"\n✓ Classification Report:")
+    print(f"\n Accuracy: {accuracy:.4f}")
+    print(f"\n Classification Report:")
     print(classification_report(y_test, y_pred, target_names=disease_encoder.classes_))
 
     # Save models
@@ -138,10 +138,10 @@ def train_disease_risk_model():
     os.makedirs("models", exist_ok=True)
 
     joblib.dump(model, "models/disease_risk_model.pkl")
-    print("✓ Model saved to models/disease_risk_model.pkl")
+    print(" Model saved to models/disease_risk_model.pkl")
 
     joblib.dump(disease_encoder, "models/disease_encoder.pkl")
-    print("✓ Encoder saved to models/disease_encoder.pkl")
+    print(" Encoder saved to models/disease_encoder.pkl")
 
     # Confusion matrix
     print("\n8. Generating confusion matrix...")
@@ -156,11 +156,11 @@ def train_disease_risk_model():
     plt.tight_layout()
 
     plt.savefig("models/disease_risk_cm.png", dpi=300, bbox_inches="tight")
-    print("✓ Confusion matrix saved to models/disease_risk_cm.png")
+    print(" Confusion matrix saved to models/disease_risk_cm.png")
     plt.close()
 
     print("\n" + "=" * 70)
-    print("✓ Disease risk model saved successfully!")
+    print(" Disease risk model saved successfully!")
     print("=" * 70)
 
 

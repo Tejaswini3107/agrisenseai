@@ -69,14 +69,14 @@ print(df_cleaned.describe())
 
 print("\n4. Test Summary")
 print("-" * 60)
-print(f"✓ Original rows: {len(df_original)}")
-print(f"✓ Cleaned rows: {len(df_cleaned)}")
-print(f"✓ Rows removed: {len(df_original) - len(df_cleaned)}")
+print(f" Original rows: {len(df_original)}")
+print(f" Cleaned rows: {len(df_cleaned)}")
+print(f" Rows removed: {len(df_original) - len(df_cleaned)}")
 print(
-    f"✓ All required columns present? {all(col in df_cleaned.columns for col in ['temperature', 'humidity', 'rainfall_mm', 'wind_speed'])}"
+    f" All required columns present? {all(col in df_cleaned.columns for col in ['temperature', 'humidity', 'rainfall_mm', 'wind_speed'])}"
 )
-print(f"✓ No NaN values in critical columns? {not df_cleaned[['temperature', 'humidity']].isnull().any().any()}")
-print(f"✓ Index properly reset? {list(df_cleaned.index) == list(range(len(df_cleaned)))}")
+print(f" No NaN values in critical columns? {not df_cleaned[['temperature', 'humidity']].isnull().any().any()}")
+print(f" Index properly reset? {list(df_cleaned.index) == list(range(len(df_cleaned)))}")
 
 print("\n" + "=" * 60)
 print("Tests completed successfully!")

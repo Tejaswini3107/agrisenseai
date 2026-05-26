@@ -31,9 +31,9 @@ def train_climate_model():
     print("\n1. Loading dataset...")
     try:
         df = pd.read_csv("data/climate_dataset.csv")
-        print(f"✓ Dataset loaded: {df.shape[0]} rows, {df.shape[1]} columns")
+        print(f" Dataset loaded: {df.shape[0]} rows, {df.shape[1]} columns")
     except FileNotFoundError:
-        print("✗ Error: data/climate_dataset.csv not found!")
+        print(" Error: data/climate_dataset.csv not found!")
         print("  Please run: python -m data_pipeline.climate_model.generate_dataset")
         return
 
@@ -68,8 +68,8 @@ def train_climate_model():
     X = df[feature_columns]
     y = df[target_column]
 
-    print(f"✓ Features shape: {X.shape}")
-    print(f"✓ Target shape: {y.shape}")
+    print(f" Features shape: {X.shape}")
+    print(f" Target shape: {y.shape}")
     print(f"\nTarget (Crop Yield) Statistics:")
     print(y.describe())
 
@@ -77,8 +77,8 @@ def train_climate_model():
     print("\n3. Splitting data (80% train, 20% test)...")
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    print(f"✓ Training set: {X_train.shape[0]} samples")
-    print(f"✓ Testing set: {X_test.shape[0]} samples")
+    print(f" Training set: {X_train.shape[0]} samples")
+    print(f" Testing set: {X_test.shape[0]} samples")
 
     # Train RandomForest model (Regressor, not Classifier)
     print("\n4. Training RandomForestRegressor...")
@@ -87,7 +87,7 @@ def train_climate_model():
     model = RandomForestRegressor(n_estimators=100, random_state=42, n_jobs=-1, max_depth=15, min_samples_split=5)
 
     model.fit(X_train, y_train)
-    print("✓ Model training completed")
+    print(" Model training completed")
 
     # Make predictions
     print("\n5. Evaluating model...")
@@ -103,12 +103,12 @@ def train_climate_model():
     rmse_train = np.sqrt(mean_squared_error(y_train, y_pred_train))
     r2_train = r2_score(y_train, y_pred_train)
 
-    print(f"\n✓ Training Metrics:")
+    print(f"\n Training Metrics:")
     print(f"   - MAE: {mae_train:.4f} tons/hectare")
     print(f"   - RMSE: {rmse_train:.4f} tons/hectare")
     print(f"   - R² Score: {r2_train:.4f}")
 
-    print(f"\n✓ Testing Metrics:")
+    print(f"\n Testing Metrics:")
     print(f"   - MAE: {mae_test:.4f} tons/hectare")
     print(f"   - RMSE: {rmse_test:.4f} tons/hectare")
     print(f"   - R² Score: {r2_test:.4f}")
@@ -130,12 +130,12 @@ def train_climate_model():
     # Save model
     model_path = "models/climate_model.pkl"
     joblib.dump(model, model_path)
-    print(f"✓ Model saved to {model_path}")
+    print(f" Model saved to {model_path}")
 
     # Save feature columns
     features_path = "models/climate_features.pkl"
     joblib.dump(feature_columns, features_path)
-    print(f"✓ Feature columns saved to {features_path}")
+    print(f" Feature columns saved to {features_path}")
 
     # Generate prediction vs actual plot
     print("\n7. Generating prediction visualization...")
@@ -162,7 +162,7 @@ def train_climate_model():
     plt.tight_layout()
     viz_path = "models/crop_yield_predictions.png"
     plt.savefig(viz_path, dpi=300, bbox_inches="tight")
-    print(f"✓ Prediction visualization saved to {viz_path}")
+    print(f" Prediction visualization saved to {viz_path}")
     plt.close()
 
     # Train feature scaler (required for predict.py)
@@ -173,9 +173,9 @@ def train_climate_model():
         feature_scaler = StandardScaler()
         feature_scaler.fit(X_train)
         joblib.dump(feature_scaler, scaler_path)
-        print(f"✓ Feature scaler saved to {scaler_path}")
+        print(f" Feature scaler saved to {scaler_path}")
     else:
-        print(f"✓ Feature scaler already exists at {scaler_path}")
+        print(f" Feature scaler already exists at {scaler_path}")
 
     # Train climate risk classifier
     print("\n9. Training Climate Risk Classifier...")
@@ -183,7 +183,7 @@ def train_climate_model():
 
     # Check if climate_risk column exists
     if "climate_risk" not in df.columns:
-        print("✗ Error: 'climate_risk' column not found in dataset!")
+        print(" Error: 'climate_risk' column not found in dataset!")
         print("  Please ensure generate_dataset.py has been run with climate_risk computation")
         return
 
@@ -194,8 +194,8 @@ def train_climate_model():
     climate_encoder = LabelEncoder()
     y_climate_encoded = climate_encoder.fit_transform(y_climate)
 
-    print(f"✓ Climate risk classes: {climate_encoder.classes_}")
-    print(f"✓ Climate risk distribution:\n{df['climate_risk'].value_counts()}")
+    print(f" Climate risk classes: {climate_encoder.classes_}")
+    print(f" Climate risk distribution:\n{df['climate_risk'].value_counts()}")
 
     # Use same train/test split
     X_train_cr, X_test_cr, y_train_cr, y_test_cr = train_test_split(
@@ -213,18 +213,18 @@ def train_climate_model():
     y_pred_cr = climate_model.predict(X_test_cr)
 
     accuracy = accuracy_score(y_test_cr, y_pred_cr)
-    print(f"\n✓ Accuracy Score: {accuracy:.4f}")
-    print(f"\n✓ Classification Report:")
+    print(f"\n Accuracy Score: {accuracy:.4f}")
+    print(f"\n Classification Report:")
     print(classification_report(y_test_cr, y_pred_cr, target_names=climate_encoder.classes_))
 
     # Save climate risk model and encoder
     climate_model_path = "models/climate_risk_model.pkl"
     joblib.dump(climate_model, climate_model_path)
-    print(f"✓ Climate risk model saved to {climate_model_path}")
+    print(f" Climate risk model saved to {climate_model_path}")
 
     climate_encoder_path = "models/climate_risk_encoder.pkl"
     joblib.dump(climate_encoder, climate_encoder_path)
-    print(f"✓ Climate risk encoder saved to {climate_encoder_path}")
+    print(f" Climate risk encoder saved to {climate_encoder_path}")
 
     # Generate confusion matrix plot
     print("\n11. Generating confusion matrix visualization...")
@@ -240,17 +240,17 @@ def train_climate_model():
 
     cm_path = "models/climate_risk_cm.png"
     plt.savefig(cm_path, dpi=300, bbox_inches="tight")
-    print(f"✓ Confusion matrix saved to {cm_path}")
+    print(f" Confusion matrix saved to {cm_path}")
     plt.close()
 
-    print("✓ Climate risk model saved")
+    print(" Climate risk model saved")
 
     # Final summary
     print("\n" + "=" * 70)
     print("Training Complete!")
     print("=" * 70)
-    print("\n✓ Models and encoders saved successfully")
-    print(f"\n📊 Model Summary:")
+    print("\n Models and encoders saved successfully")
+    print(f"\n Model Summary:")
     print(f"   - Crop Yield Model Type: RandomForestRegressor")
     print(f"   - Crop Yield Test R² Score: {r2_test:.4f}")
     print(f"   - Crop Yield Test MAE: {mae_test:.4f} tons/hectare")
@@ -259,7 +259,7 @@ def train_climate_model():
     print(f"   - Climate Risk Accuracy: {accuracy:.4f}")
     print(f"   - Training samples: {X_train.shape[0]}")
     print(f"   - Testing samples: {X_test.shape[0]}")
-    print(f"\n📁 Saved Files:")
+    print(f"\n Saved Files:")
     print(f"   - {model_path}")
     print(f"   - {features_path}")
     print(f"   - {scaler_path}")

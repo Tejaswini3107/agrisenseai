@@ -14,12 +14,12 @@ print("-" * 60)
 try:
     soil_moisture = get_soil_moisture(latitude, longitude)
     if soil_moisture is not None:
-        print(f"✓ Soil Moisture (GWETROOT) for ({latitude}, {longitude}): {soil_moisture}")
+        print(f" Soil Moisture (GWETROOT) for ({latitude}, {longitude}): {soil_moisture}")
         print(f"  (Value between 0=dry and 1=saturated)")
     else:
-        print("✗ Failed to fetch soil moisture data")
+        print(" Failed to fetch soil moisture data")
 except Exception as e:
-    print(f"✗ Error: {e}")
+    print(f" Error: {e}")
 
 print("\n2. Testing get_historical_weather(lat, lon, start_date, end_date)")
 print("-" * 60)
@@ -34,7 +34,7 @@ try:
     df = get_historical_weather(latitude, longitude, start_date, end_date)
 
     if df is not None and len(df) > 0:
-        print(f"✓ Retrieved {len(df)} days of historical weather data")
+        print(f" Retrieved {len(df)} days of historical weather data")
         print("\nDataFrame head:")
         print(df.head())
         print("\nDataFrame info:")
@@ -42,9 +42,9 @@ try:
         print("\nDataFrame statistics:")
         print(df.describe())
     else:
-        print("✗ Failed to fetch historical weather data")
+        print(" Failed to fetch historical weather data")
 except Exception as e:
-    print(f"✗ Error: {e}")
+    print(f" Error: {e}")
 
 print("\n" + "=" * 60)
 print("Tests completed!")

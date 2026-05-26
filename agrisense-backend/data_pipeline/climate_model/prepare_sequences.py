@@ -27,13 +27,13 @@ def prepare_sequences(csv_path, sequence_length=7, forecast_horizon=3):
     # Load data
     print(f"\n1. Loading data from {csv_path}...")
     df = pd.read_csv(csv_path)
-    print(f"✓ Loaded {len(df)} rows")
+    print(f" Loaded {len(df)} rows")
 
     # Sort by location and date to maintain temporal order
     print(f"\n2. Sorting data by location and date...")
     df["date"] = pd.to_datetime(df["date"])
     df = df.sort_values(["location", "date"]).reset_index(drop=True)
-    print(f"✓ Data sorted")
+    print(f" Data sorted")
 
     # Select weather features to forecast
     weather_features = ["temperature", "humidity", "rainfall_mm", "wind_speed"]
@@ -74,7 +74,7 @@ def prepare_sequences(csv_path, sequence_length=7, forecast_horizon=3):
                 y_sequences.append(y_seq)
                 sequence_dates.append(location_dates[i + sequence_length - 1])
 
-        print(f"   ✓ Created {len([x for x in X_sequences if x is not None])} sequences")
+        print(f"    Created {len([x for x in X_sequences if x is not None])} sequences")
 
     # Convert to numpy arrays
     X_sequences = np.array(X_sequences)
@@ -97,11 +97,11 @@ def prepare_sequences(csv_path, sequence_length=7, forecast_horizon=3):
     joblib.dump(scalers, "data/sequences/scalers.pkl")
     joblib.dump(weather_features, "data/sequences/weather_features.pkl")
 
-    print(f"✓ X_sequences.npy saved")
-    print(f"✓ y_sequences.npy saved")
-    print(f"✓ sequence_dates.npy saved")
-    print(f"✓ scalers.pkl saved")
-    print(f"✓ weather_features.pkl saved")
+    print(f" X_sequences.npy saved")
+    print(f" y_sequences.npy saved")
+    print(f" sequence_dates.npy saved")
+    print(f" scalers.pkl saved")
+    print(f" weather_features.pkl saved")
 
     print("\n" + "=" * 70)
     print("Sequence preparation completed successfully!")

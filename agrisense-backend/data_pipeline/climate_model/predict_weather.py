@@ -24,9 +24,9 @@ def forecast_weather(days_history):
         model = keras.models.load_model("models/lstm_weather_model.keras")
         scalers = joblib.load("data/sequences/scalers.pkl")
         weather_features = joblib.load("data/sequences/weather_features.pkl")
-        print("✓ Model and scalers loaded")
+        print(" Model and scalers loaded")
     except FileNotFoundError as e:
-        print(f"✗ Error: {e}")
+        print(f" Error: {e}")
         print("  Please run: python -m data_pipeline.climate_model.train_lstm")
         return None
 
@@ -40,7 +40,7 @@ def forecast_weather(days_history):
 
     # Add batch dimension
     X_input = np.expand_dims(X_scaled, axis=0)  # Shape: (1, 7, 4)
-    print(f"✓ Input shape: {X_input.shape}")
+    print(f" Input shape: {X_input.shape}")
 
     # Make prediction
     print("\n3. Making 3-day forecast...")
@@ -63,7 +63,7 @@ def forecast_weather(days_history):
     forecast_dict = {}
     for day in range(3):
         day_num = day + 1
-        print(f"\n📅 Day {day_num}:")
+        print(f"\nDay {day_num}:")
         day_forecast = {}
 
         for feature_idx, feature in enumerate(weather_features):

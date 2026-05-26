@@ -63,9 +63,9 @@ def train_crop_recommendation_model():
     print("\n1. Loading dataset...")
     try:
         df = pd.read_csv("data/climate_dataset.csv")
-        print(f"✓ Dataset loaded: {df.shape[0]} rows, {df.shape[1]} columns")
+        print(f"Dataset loaded: {df.shape[0]} rows, {df.shape[1]} columns")
     except FileNotFoundError:
-        print("✗ Error: data/climate_dataset.csv not found!")
+        print("Error: data/climate_dataset.csv not found!")
         print("  Please run: python data_pipeline/climate_model/generate_dataset.py")
         return
 
@@ -73,7 +73,7 @@ def train_crop_recommendation_model():
     print("\n2. Generating crop recommendation labels...")
     df["recommended_crop"] = generate_crop_recommendations(df)
     crop_counts = df["recommended_crop"].value_counts()
-    print(f"✓ Crop distribution:\n{crop_counts}")
+    print(f"Crop distribution:\n{crop_counts}")
 
     # Prepare features and target
     print("\n3. Preparing features and target...")
@@ -96,28 +96,28 @@ def train_crop_recommendation_model():
     crop_encoder = LabelEncoder()
     y_encoded = crop_encoder.fit_transform(y)
 
-    print(f"✓ Crops: {crop_encoder.classes_}")
-    print(f"✓ Features shape: {X.shape}")
+    print(f"Crops: {crop_encoder.classes_}")
+    print(f"Features shape: {X.shape}")
 
     # Train-test split
     print("\n4. Splitting data (80% train, 20% test)...")
     X_train, X_test, y_train, y_test = train_test_split(X, y_encoded, test_size=0.2, random_state=42)
-    print(f"✓ Training: {X_train.shape[0]}, Testing: {X_test.shape[0]}")
+    print(f"Training: {X_train.shape[0]}, Testing: {X_test.shape[0]}")
 
     # Train model
     print("\n5. Training RandomForestClassifier...")
     model = RandomForestClassifier(n_estimators=150, random_state=42, n_jobs=-1, max_depth=15)
 
     model.fit(X_train, y_train)
-    print("✓ Model training completed")
+    print("Model training completed")
 
     # Evaluate
     print("\n6. Evaluating model...")
     y_pred = model.predict(X_test)
     accuracy = accuracy_score(y_test, y_pred)
 
-    print(f"\n✓ Accuracy: {accuracy:.4f}")
-    print(f"\n✓ Classification Report:")
+    print(f"\n Accuracy: {accuracy:.4f}")
+    print(f"\n Classification Report:")
     print(classification_report(y_test, y_pred, target_names=crop_encoder.classes_))
 
     # Save models
@@ -126,11 +126,11 @@ def train_crop_recommendation_model():
 
     model_path = "models/crop_selector_model.pkl"
     joblib.dump(model, model_path)
-    print(f"✓ Model saved to {model_path}")
+    print(f" Model saved to {model_path}")
 
     encoder_path = "models/crop_encoder.pkl"
     joblib.dump(crop_encoder, encoder_path)
-    print(f"✓ Encoder saved to {encoder_path}")
+    print(f" Encoder saved to {encoder_path}")
 
     # Feature importance
     print("\n8. Feature Importance:")

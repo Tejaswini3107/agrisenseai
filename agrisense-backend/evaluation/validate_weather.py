@@ -68,7 +68,7 @@ y_pred = (rain_proba >= 0.48).astype(int)
 rain_acc = accuracy_score(y_test, y_pred)
 print(f"Rain/No-Rain Accuracy: {rain_acc:.1%}  (Target: >= 75%)")
 
-# Step 8: Temperature persistence accuracy — computed per location.
+# Step 8: Temperature persistence accuracy , computed per location.
 # The dataset has 7 locations. Consecutive rows in the full sorted dataset
 # are from different locations, so comparing them gives meaningless results.
 # Computing per-location first and then averaging gives an honest number.

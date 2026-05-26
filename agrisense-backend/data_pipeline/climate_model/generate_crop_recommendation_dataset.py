@@ -17,7 +17,7 @@ def generate_crop_recommendation_dataset():
     # Load existing climate data
     print("\n1. Loading climate dataset...")
     df = pd.read_csv("data/climate_dataset.csv")
-    print(f"✓ Loaded {len(df)} climate records")
+    print(f" Loaded {len(df)} climate records")
 
     # Crop requirements (temp, humidity, rainfall ranges)
     # Format: (temp_min, temp_max, humidity_min, humidity_max, rainfall_min_daily, rainfall_max_daily, vpd_min, vpd_max)
@@ -242,11 +242,11 @@ def generate_crop_recommendation_dataset():
 
     dataset_path = "data/crop_recommendation_dataset.csv"
     df.to_csv(dataset_path, index=False)
-    print(f"✓ Dataset saved to {dataset_path}")
+    print(f" Dataset saved to {dataset_path}")
 
     # Save crop requirements
     joblib.dump(CROP_REQUIREMENTS, "data/crop_requirements.pkl")
-    print(f"✓ Crop requirements saved")
+    print(f" Crop requirements saved")
 
     print("\n" + "=" * 70)
     print("Dataset generation completed!")

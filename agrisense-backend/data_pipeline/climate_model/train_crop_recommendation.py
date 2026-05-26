@@ -22,9 +22,9 @@ def train_crop_recommendation_models():
     print("\n1. Loading crop recommendation dataset...")
     try:
         df = pd.read_csv("data/crop_recommendation_dataset.csv")
-        print(f"✓ Loaded {len(df)} records")
+        print(f" Loaded {len(df)} records")
     except FileNotFoundError:
-        print("✗ Dataset not found! Running generation first...")
+        print(" Dataset not found! Running generation first...")
         os.system("python -m data_pipeline.climate_model.generate_crop_recommendation_dataset")
         df = pd.read_csv("data/crop_recommendation_dataset.csv")
 
@@ -61,13 +61,13 @@ def train_crop_recommendation_models():
     crop_model.fit(X_train, y_train)
 
     crop_accuracy = accuracy_score(y_test, crop_model.predict(X_test))
-    print(f"✓ Crop Suitability Accuracy: {crop_accuracy:.4f} ({crop_accuracy*100:.2f}%)")
+    print(f" Crop Suitability Accuracy: {crop_accuracy:.4f} ({crop_accuracy*100:.2f}%)")
     print("\nCrop Prediction Report:")
     print(classification_report(y_test, crop_model.predict(X_test), target_names=crop_encoder.classes_))
 
     joblib.dump(crop_model, "models/crop_selector_model.pkl")
     joblib.dump(crop_encoder, "models/crop_encoder.pkl")
-    print("✓ Crop model saved")
+    print(" Crop model saved")
 
     # ==================== Model 2: Disease Risk Classifier ====================
     print("\n3. Training Disease Risk Classifier...")
@@ -84,11 +84,11 @@ def train_crop_recommendation_models():
     disease_model.fit(X_train, y_train)
 
     disease_accuracy = accuracy_score(y_test, disease_model.predict(X_test))
-    print(f"✓ Disease Risk Accuracy: {disease_accuracy:.4f} ({disease_accuracy*100:.2f}%)")
+    print(f" Disease Risk Accuracy: {disease_accuracy:.4f} ({disease_accuracy*100:.2f}%)")
 
     joblib.dump(disease_model, "models/disease_risk_model.pkl")
     joblib.dump(disease_encoder, "models/disease_encoder.pkl")
-    print("✓ Disease model saved")
+    print(" Disease model saved")
 
     # ==================== Model 3: Plant Stress Classifier ====================
     print("\n4. Training Plant Stress Classifier...")
@@ -105,11 +105,11 @@ def train_crop_recommendation_models():
     stress_model.fit(X_train, y_train)
 
     stress_accuracy = accuracy_score(y_test, stress_model.predict(X_test))
-    print(f"✓ Plant Stress Accuracy: {stress_accuracy:.4f} ({stress_accuracy*100:.2f}%)")
+    print(f" Plant Stress Accuracy: {stress_accuracy:.4f} ({stress_accuracy*100:.2f}%)")
 
     joblib.dump(stress_model, "models/plant_stress_model.pkl")
     joblib.dump(stress_encoder, "models/stress_encoder.pkl")
-    print("✓ Stress model saved")
+    print(" Stress model saved")
 
     # ==================== Model 4: Irrigation Requirement Regressor ====================
     print("\n5. Training Irrigation Requirement Regressor...")
@@ -124,11 +124,11 @@ def train_crop_recommendation_models():
     y_pred = irrigation_model.predict(X_test)
     irrigation_mae = mean_absolute_error(y_test, y_pred)
     irrigation_r2 = r2_score(y_test, y_pred)
-    print(f"✓ Irrigation MAE: {irrigation_mae:.4f} L/m²")
-    print(f"✓ Irrigation R² Score: {irrigation_r2:.4f}")
+    print(f" Irrigation MAE: {irrigation_mae:.4f} L/m²")
+    print(f" Irrigation R² Score: {irrigation_r2:.4f}")
 
     joblib.dump(irrigation_model, "models/irrigation_requirement_model.pkl")
-    print("✓ Irrigation model saved")
+    print(" Irrigation model saved")
 
     # ==================== Model 5: Yield Prediction Regressor ====================
     print("\n6. Training Yield Prediction Regressor...")
@@ -143,11 +143,11 @@ def train_crop_recommendation_models():
     y_pred = yield_model.predict(X_test)
     yield_mae = mean_absolute_error(y_test, y_pred)
     yield_r2 = r2_score(y_test, y_pred)
-    print(f"✓ Yield MAE: {yield_mae:.4f} tons/hectare")
-    print(f"✓ Yield R² Score: {yield_r2:.4f}")
+    print(f" Yield MAE: {yield_mae:.4f} tons/hectare")
+    print(f" Yield R² Score: {yield_r2:.4f}")
 
     joblib.dump(yield_model, "models/yield_prediction_model.pkl")
-    print("✓ Yield model saved")
+    print(" Yield model saved")
 
     # ==================== Feature Importance Analysis ====================
     print("\n7. Feature Importance Across Models:")
@@ -193,7 +193,7 @@ def train_crop_recommendation_models():
 
     plt.tight_layout()
     plt.savefig("models/feature_importance_analysis.png", dpi=300, bbox_inches="tight")
-    print("✓ Feature importance plot saved")
+    print(" Feature importance plot saved")
     plt.close()
 
     # ==================== Final Summary ====================
@@ -202,7 +202,7 @@ def train_crop_recommendation_models():
     print("=" * 70)
 
     summary = f"""
-📊 Model Performance Summary:
+ Model Performance Summary:
    
    1. Crop Suitability Classifier
       - Accuracy: {crop_accuracy*100:.2f}%
@@ -224,7 +224,7 @@ def train_crop_recommendation_models():
       - MAE: {yield_mae:.4f} tons/hectare
       - R² Score: {yield_r2:.4f}
 
-📁 Saved Models:
+ Saved Models:
    - models/crop_selector_model.pkl
    - models/disease_risk_model.pkl
    - models/plant_stress_model.pkl
@@ -232,7 +232,7 @@ def train_crop_recommendation_models():
    - models/yield_prediction_model.pkl
    - models/feature_importance_analysis.png
 
-🎯 Top 3 Most Important Features:
+ Top 3 Most Important Features:
    1. {feature_importances.index[0]} ({feature_importances['Mean'].iloc[0]:.4f})
    2. {feature_importances.index[1]} ({feature_importances['Mean'].iloc[1]:.4f})
    3. {feature_importances.index[2]} ({feature_importances['Mean'].iloc[2]:.4f})
