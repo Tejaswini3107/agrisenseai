@@ -33,3 +33,5 @@ MANIFEST
 htmlcov/
 .DS_Store
 .env.*.local
+*.md
+agrisense-ai-211d9-firebase-adminsdk-fbsvc-ecd5de0093.json

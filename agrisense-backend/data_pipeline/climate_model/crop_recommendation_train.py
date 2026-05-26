@@ -5,7 +5,7 @@ import joblib
 import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, ConfusionMatrixDisplay
 from sklearn.preprocessing import LabelEncoder
 import warnings
 
@@ -124,11 +124,11 @@ def train_crop_recommendation_model():
     print("\n7. Saving models...")
     os.makedirs("models", exist_ok=True)
 
-    model_path = "models/crop_selector.pkl"
+    model_path = "models/crop_selector_model.pkl"
     joblib.dump(model, model_path)
     print(f"✓ Model saved to {model_path}")
 
-    encoder_path = "models/crop_label_encoder.pkl"
+    encoder_path = "models/crop_encoder.pkl"
     joblib.dump(crop_encoder, encoder_path)
     print(f"✓ Encoder saved to {encoder_path}")
 
@@ -141,23 +141,21 @@ def train_crop_recommendation_model():
 
     # Confusion matrix plot
     print("\n9. Generating confusion matrix...")
-    from sklearn.metrics import ConfusionMatrixDisplay
-
     cm = confusion_matrix(y_test, y_pred)
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=crop_encoder.classes_)
 
-    fig, ax = plt.subplots(figsize=(10, 8))
+    _, ax = plt.subplots(figsize=(10, 8))
     disp.plot(ax=ax, cmap="Blues", values_format="d")
     ax.set_title("Crop Recommendation Confusion Matrix")
     plt.tight_layout()
 
     cm_path = "models/crop_selector_cm.png"
     plt.savefig(cm_path, dpi=300, bbox_inches="tight")
-    print(f"✓ Confusion matrix saved to {cm_path}")
+    print(f"Confusion matrix saved to {cm_path}")
     plt.close()
 
     print("\n" + "=" * 70)
-    print("✓ Crop recommendation model saved successfully!")
+    print("Crop recommendation model saved successfully!")
     print("=" * 70)
 
 

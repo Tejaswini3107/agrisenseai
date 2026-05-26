@@ -9,13 +9,18 @@ app = FastAPI(title="AgriSenseAI API", description="Agricultural Intelligence Pl
 origins = [
     "http://localhost:3000",
     "http://localhost:8000",
+    "http://localhost:8081",
+    "http://localhost:19006",
     "http://127.0.0.1:3000",
     "http://127.0.0.1:8000",
+    "http://127.0.0.1:8081",
+    "http://10.0.2.2:8000",  # Android emulator
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
+    allow_origin_regex=r"http://(localhost|127\.0\.0\.1)(:\d+)?",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -44,7 +49,7 @@ async def get_crop_health():
             {"name": "rice", "health": 85, "status": "healthy"},
             {"name": "wheat", "health": 78, "status": "good"},
             {"name": "cotton", "health": 72, "status": "fair"},
-            {"name": "tomato", "health": 90, "status": "excellent"},
+            {"name": "sugarcane", "health": 90, "status": "excellent"},
         ]
     }
 
