@@ -406,3 +406,5 @@ python -m pytest tests/ -v
 |--------|--------|
 | Rehan Shafique | Pest risk prediction, irrigation recommendation, API endpoints, test suite |
 | Marryum | Climate risk model, crop recommendation model, disease risk model, LSTM weather forecasting, weather data pipeline |
+| Tejaswini Madame | Front-End, UI/UX, ChatBot Integration, Backend Integration |
+| Jeet Kumar Ratanpara | CI/CD pipeline, DevOps, Backend Development, Database Design, Architecture Engineering |
