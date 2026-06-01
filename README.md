@@ -1,94 +1,94 @@
-# AgriSenseAI
+# AgriSense AI
 
+An AI-powered agricultural advisory platform built for smallholder farmers in South Asia. Delivers real-time pest risk assessment, irrigation recommendations, crop recommendations, climate risk analysis, and an agricultural chatbot — through a mobile app backed by a REST API.
 
+---
 
-## Getting started
+## What It Does
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Farmers in regions like Punjab, Sindh and Maharashtra often lose a significant portion of their yield to pest outbreaks or incorrect watering — not because they don't work hard, but because they don't have access to agronomists. AgriSense AI puts that advice in their pocket.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+A farmer opens the app, selects their crop and growth stage, and gets told:
+- Whether pests are likely to hit and which pest to watch for
+- Whether they need to irrigate today and how much water to apply
+- What the climate risk looks like for their location
+- Which crop is best suited to their current conditions
 
-## Add your files
+---
 
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+## Project Structure
 
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/TejuReddyy/agrisenseai.git
-git branch -M main
-git push -uf origin main
+agrisense-backend/       Python FastAPI backend + ML models
+agrisense-mobile/        React Native mobile app
+agrisense-admin-website/ Next.js admin dashboard
 ```
 
-## Integrate with your tools
+---
 
-* [Set up project integrations](https://gitlab.com/TejuReddyy/agrisenseai/-/settings/integrations)
+## Backend — AI Modules
 
-## Collaborate with your team
+### Pest Risk Prediction
+- 11 years of NASA POWER weather data across 9 South Asian locations
+- Pest-environment thresholds from peer-reviewed research (PMC11882091, PMC7564875, PMC4153587)
+- Random Forest classifier — 86.6% risk accuracy, 91.9% pest type accuracy
+- Endpoint: `POST /api/pest/predict`
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+### Irrigation Recommendation
+- FAO-56 international crop water requirement standards (Allen et al. 1998)
+- XGBoost classifier + regressor — 99.78% decision accuracy, water amount MAE 4.87mm
+- Endpoint: `POST /api/irrigation/predict`
 
-## Test and Deploy
+### Climate & Crop Models
+- Crop recommendation, climate risk, disease risk, plant stress — Random Forest
+- LSTM neural network for weather time-series forecasting
+- Endpoint: `GET /api/weather/current?lat=&lon=`
 
-Use the built-in continuous integration in GitLab.
+### Chatbot
+- Agricultural Q&A in plain language
+- Endpoint: `POST /api/chatbot/ask`
 
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
+Full backend documentation → [agrisense-backend/README.md](agrisense-backend/README.md)
 
-***
+---
 
-# Editing this README
+## Tech Stack
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+| Layer | Technology |
+|-------|-----------|
+| Backend | Python, FastAPI, PostgreSQL |
+| ML | scikit-learn, XGBoost, TensorFlow, pandas |
+| Data | NASA POWER API, OpenWeatherMap, Open-Meteo |
+| Mobile | React Native |
+| Admin | Next.js |
+| Infrastructure | Docker, GitHub Actions CI/CD |
 
-## Suggestions for a good README
+---
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+## Getting Started
 
-## Name
-Choose a self-explaining name for your project.
+```bash
+# Backend
+cd agrisense-backend
+source ../venv/bin/activate
+pip install -r requirements.txt
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+# Train models (required — model files are not in git)
+python ml/pest/train.py
+python ml/irrigation/train.py
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+# Start server
+python -m uvicorn app.main:app --host 0.0.0.0 --port 8001
+```
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+API docs available at `http://localhost:8001/docs`
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+---
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
-# trigger
+## Team
+| Member | Module |
+|--------|--------|
+| Rehan Shafique | Pest risk prediction, irrigation recommendation, API endpoints, test suite |
+| Marryum | Climate risk model, crop recommendation, disease risk, LSTM weather forecasting |
+| Tejaswini | Frontend integration |
+| Jeet | Frontend integration |
