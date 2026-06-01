@@ -6,14 +6,20 @@ import pandas as pd
 _BASE_DIR   = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 _MODELS_DIR = os.path.join(_BASE_DIR, "models")
 
-_risk_model      = joblib.load(os.path.join(_MODELS_DIR, "pest_model.pkl"))
-_type_model      = joblib.load(os.path.join(_MODELS_DIR, "pest_type_model.pkl"))
-_risk_encoder    = joblib.load(os.path.join(_MODELS_DIR, "pest_risk_encoder.pkl"))
-_type_encoder    = joblib.load(os.path.join(_MODELS_DIR, "pest_type_encoder.pkl"))
-_feature_encoder = joblib.load(os.path.join(_MODELS_DIR, "pest_feature_encoder.pkl"))
+try:
+    _risk_model      = joblib.load(os.path.join(_MODELS_DIR, "pest_model.pkl"))
+    _type_model      = joblib.load(os.path.join(_MODELS_DIR, "pest_type_model.pkl"))
+    _risk_encoder    = joblib.load(os.path.join(_MODELS_DIR, "pest_risk_encoder.pkl"))
+    _type_encoder    = joblib.load(os.path.join(_MODELS_DIR, "pest_type_encoder.pkl"))
+    _feature_encoder = joblib.load(os.path.join(_MODELS_DIR, "pest_feature_encoder.pkl"))
+except FileNotFoundError:
+    _risk_model = _type_model = _risk_encoder = _type_encoder = _feature_encoder = None
 
 
 def predict(features: dict) -> dict:
+    if _risk_model is None:
+        raise RuntimeError("Pest models not found. Run ml/pest/train.py first.")
+
     cat = pd.DataFrame([[features["crop_type"], features["growth_stage"]]], columns=["crop_type", "growth_stage"])
     encoded_cat = _feature_encoder.transform(cat)[0]
 
