@@ -86,7 +86,6 @@ API docs available at `http://localhost:8001/docs`
 ---
 
 ## Team
-
 | Member | Module |
 |--------|--------|
 | Rehan Shafique | Pest risk prediction, irrigation recommendation, API endpoints, test suite |

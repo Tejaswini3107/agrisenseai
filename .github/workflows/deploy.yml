@@ -3,8 +3,7 @@ name: AgriSense AI — 7 Stage Pipeline
 on:
   push:
     branches:
-      - main
-      - feature/Adminchanges_Jeet
+      - main    
 
 env:
   AWS_REGION: eu-north-1
@@ -174,12 +173,33 @@ jobs:
             docker pull 561818313889.dkr.ecr.eu-north-1.amazonaws.com/agrisense-backend:latest
             docker pull 561818313889.dkr.ecr.eu-north-1.amazonaws.com/agrisense-admin:latest
             cd ~/agrisense
+
+            cat > docker-compose.yml << EOF
+            services:
+             backend:
+              image: 561818313889.dkr.ecr.eu-north-1.amazonaws.com/agrisense-backend:latest
+                ports:
+                 - "8000:8000"
+               environment:
+                - DB_HOST=agrisense-db.cfoqq0o00rh0.eu-north-1.rds.amazonaws.com
+                - DB_USER=agrisense_admin
+                - DB_PASSWORD=sEBtT6U9fswuCeG
+                - HF_TOKEN=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
+              admin:
+                image: 561818313889.dkr.ecr.eu-north-1.amazonaws.com/agrisense-admin:latest
+                ports:
+                 - "3000:3000"
+            EOF
+            docker compose down
+            docker compose up -d
+
             export DB_HOST=$DB_HOST
             export DB_USER=$DB_USER
             export DB_PASSWORD=$DB_PASSWORD
             export HF_TOKEN=$HF_TOKEN
             docker compose -f docker-compose.prod.yml down
             docker compose -f docker-compose.prod.yml up -d
+
 
   # ─── Stage 7: Smoke Test ─────────────────────────────────
   smoke-test:

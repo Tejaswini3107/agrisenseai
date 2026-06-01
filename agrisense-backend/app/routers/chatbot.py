@@ -52,7 +52,7 @@ def explain_irrigation(request: IrrigationRequest):
     else:
         decision = "irrigate today" if request.irrigate else "wait before irrigating"
         context = f"Explain in simple terms why a farmer should {decision}. Reason: {request.reason}"
-    
+
     answer = ask_agriparam("What is your advice based on this irrigation situation?", context)
     return {"irrigation_decision": request.irrigate, "reason": request.reason, "advice": answer}
 
